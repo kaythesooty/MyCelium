@@ -1,17 +1,29 @@
 {
   "compilerOptions": {
     "types": ["vite/client"],
-    "target": "es2020", 
+    "target": "es2020",
     "jsx": "react-jsx",
     "module": "ES2020",
-    "moduleResolution": "Bundler", 
+    "moduleResolution": "Bundler",
     "noEmit": true,
-    "isolatedModules": true, 
+    "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "allowImportingTsExtensions": true,
     "allowJs": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@assets/*": ["client/assets/*"],
+      "@components/*": ["client/components/*"],
+      "@context/*": ["client/context/*"],
+      "@game/*": ["client/game/*"],
+      "@hooks/*": ["client/hooks/*"],
+      "@pages/*": ["client/pages/*"],
+      "@styles/*": ["client/styles/*"],
+      "@utils/*": ["client/utils/*"],
+      "@models/*": ["models/*"]
+    }
   }
 }

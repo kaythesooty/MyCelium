@@ -1,19 +1,20 @@
-import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import routes from './routes.tsx'
+import { createRoot } from 'react-dom/client'
 import { Auth0Provider } from '@auth0/auth0-react'
+import routes from './routes.tsx'
 
-const router = createBrowserRouter(routes)
-const queryClient = new QueryClient()
+export const router = createBrowserRouter(routes, {
+  future: {
+    v7_relativeSplatPath: true,
+    v7_fetcherPersist: true,
+    v7_partialHydration: true,
+    v7_skipActionErrorRevalidation: true,
+    v7_normalizeFormMethod: true,
+  },
+})
 
 document.addEventListener('DOMContentLoaded', () => {
   createRoot(document.getElementById('app') as HTMLElement).render(
-    /**
-     * TODO: replace domain, clientId, and audience
-     */
     <Auth0Provider
       domain=""
       clientId=""
@@ -22,10 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audience: '',
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools />
-      </QueryClientProvider>
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
     </Auth0Provider>,
   )
 })
