@@ -4,10 +4,12 @@ import { EventBus } from '../EventBus'
 
 export class SpriteGame extends Scene {
   background!: GameObjects.Image
-  platform!: Physics.Arcade.StaticGroup
+  platforms!: Physics.Arcade.StaticGroup
   player!: GameObjects.Sprite
   stars!: GameObjects.Sprite
   score!: GameObjects.Text
+
+  // physics!: Physics.Arcade.ArcadePhysics
   // cursors!: Scene
   // physics!:
 
@@ -22,21 +24,19 @@ export class SpriteGame extends Scene {
   create() {
     this.background = this.add.image(512, 384, 'sky')
 
-    this.platform = this.add.group()
+    this.platforms = this.physics.add.staticGroup()
 
-    this.platform.create(400, 568, 'ground')
-    // this.platform.create(400, 568, 'ground').setScale(2).refreshBody()
+    this.platforms.create(400, 568, 'ground').setScale(2).refreshBody()
 
-    this.platform.create(600, 400, 'ground')
-    this.platform.create(50, 250, 'ground')
-    this.platform.create(750, 220, 'ground')
+    this.platforms.create(600, 400, 'ground')
+    this.platforms.create(50, 250, 'ground')
+    this.platforms.create(750, 220, 'ground')
 
-    EventBus.emit('current-scene-ready', this)
+    this.player = this.physics.add.sprite(100, 450, 'dude')
 
-    // this.player = this.physics.add.sprite(100, 450, 'dude')
-
-    // this.player.setBounce(0.2)
-    // this.player.setCollideWorldBounds(true)
+    this.player.setBounce(0.2)
+    this.player.setCollideWorldBounds(true)
+    this.physics.add.collider(this.player, this.platforms)
 
     // this.anims.create({
     //   // left sprite animation (uses frames 0-3) runs at 10 frames per second
@@ -84,6 +84,8 @@ export class SpriteGame extends Scene {
     //   fontSize: '32px',
     //   fill: '#000',
     // })
+
+    EventBus.emit('current-scene-ready', this)
   }
 
   update() {
