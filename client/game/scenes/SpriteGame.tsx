@@ -7,15 +7,10 @@ export class SpriteGame extends Scene {
   player!: Physics.Arcade.Sprite
   stars!: GameObjects.Group
   bombs!: GameObjects.Group
-  score!: GameObjects.Text
+  score!: number
   scoreText!: GameObjects.Text
-  gameOver!: any
-  // cursors!: Input.Keyboard.Key
   cursors!: Types.Input.Keyboard.CursorKeys
-
-  // physics!: Physics.Arcade.ArcadePhysics
-  // cursors!: Scene
-  // physics!:
+  gameOver!: boolean
 
   constructor() {
     super('SpriteGame')
@@ -72,8 +67,10 @@ export class SpriteGame extends Scene {
       // stepX means all children will be placed evently accross the screen
     })
 
-    this.stars.children.iterate(function (child) {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)) // randomly bounce
+    this.stars.children.iterate((child: GameObjects.GameObject) => {
+      const _child = child as Physics.Arcade.Sprite
+      _child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)) // randomly bounce
+      return null
     })
 
     this.bombs = this.physics.add.group()
@@ -86,17 +83,25 @@ export class SpriteGame extends Scene {
     this.physics.add.collider(this.stars, this.platforms)
     this.physics.add.collider(this.bombs, this.platforms)
 
-    this.physics.add.collider(this.player, this.bombs, undefined) //undefined instead of null??? or something else? the problem is hitBomb i bet
-    // this.physics.add.overlap(
-    //   this.player,
-    //   this.stars,
-    //   this.collectStar,
-    //   null,
-    //   this,
-    // )
+    this.physics.add.collider(
+      this.player,
+      this.bombs,
+      this.hitBomb,
+      () => {},
+      this,
+    )
+
+    this.physics.add.collider(this.player, this.bombs, undefined)
+    this.physics.add.overlap(
+      this.player,
+      this.stars,
+      this.collectStar as ShutTheFuckUpTypescript,
+      () => {},
+      this,
+    )
     this.scoreText = this.add.text(16, 16, 'score: 0', {
       fontSize: '32px',
-      font: '#000', //was fill before
+      color: '#000', //was fill before
     })
 
     EventBus.emit('current-scene-ready', this)
@@ -105,7 +110,7 @@ export class SpriteGame extends Scene {
   update() {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160)
-      this.player.anims.play('left')
+      this.player.anims.play('left', true)
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160)
       this.player.anims.play('right', true)
@@ -118,36 +123,37 @@ export class SpriteGame extends Scene {
     }
   }
 
-  // collectStar(player, star) {
-  //   star.disableBody(true, true)
+  collectStar(player: Physics.Arcade.Sprite, star: Physics.Arcade.Sprite) {
+    star.disableBody(true, true)
 
-  //   score += 10
-  //   scoreText.setText('Score: ' + score)
+    this.score += 10
+    this.scoreText.setText('Score: ' + this.score)
 
-  //   if (stars.countActive(true) === 0) {
-  //     stars.children.iterate(function (child) {
-  //       child.enableBody(true, child.x, 0, true, true)
-  //     })
+    if (this.stars.countActive(true) === 0) {
+      this.stars.children.iterate((child: GameObjects.GameObject) => {
+        const _child = child as Physics.Arcade.Sprite
+        _child.enableBody(true, _child.x, 0, true, true)
+        return null
+      })
 
-  //     const x =
-  //       player.x < 400
-  //         ? Phaser.Math.Between(400, 800)
-  //         : Phaser.Math.Between(0, 400)
+      const x =
+        player.x < 400
+          ? Phaser.Math.Between(400, 800)
+          : Phaser.Math.Between(0, 400)
 
-  //     const bomb = bombs.create(x, 16, 'bomb')
-  //     bomb.setBounce(1)
-  //     bomb.setCollideWorldBounds(true)
-  //     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
-  //   }
-  // }
+      const bomb = this.bombs.create(x, 16, 'bomb')
+      bomb.setBounce(1)
+      bomb.setCollideWorldBounds(true)
+      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
+    }
+  }
 
-  // hitBomb(player, bomb) {
-  //   //instead of this. maybe scene. ?
-  //   this.physics.pause()
-  //   this.player.setTint(0xff0000)
-  //   this.player.anims.play('turn')
-  //   this.gameOver = true
-  // }
+  hitBomb(player: Physics.Arcade.Sprite) {
+    this.physics.pause()
+    player.setTint(0xff0000)
+    player.anims.play('turn')
+    this.gameOver = true
+  }
 
   changeScene() {
     this.scene.start('MainMenu')
