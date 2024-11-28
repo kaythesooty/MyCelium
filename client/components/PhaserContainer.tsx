@@ -1,56 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { MainMenu } from '@game/scenes/MainMenu'
-import '@styles/phaser.scss'
+import { Game, Scene } from 'phaser'
 import StartGame from '@game/main'
 import { EventBus } from '@game/EventBus'
-import { Game, Scene } from 'phaser'
+import '@styles/phaser.scss'
 
 export default function PhaserContainer() {
   const [currentScene, setCurrentScene] = useState<Scene | null>(null)
-  const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 })
-  // The sprite can only be moved in the MainMenu Scene
-  const [isMainMenu, setIsMainMenu] = useState(true)
   const game = useRef<Game | null>(null!)
-
-  const changeScene = () => {
-    if (!game.current || !currentScene) return
-
-    const scene = currentScene as MainMenu
-    scene.changeScene()
-  }
-
-  const moveSprite = () => {
-    if (!game.current || !currentScene) return
-
-    if (currentScene.scene.key === 'MainMenu') {
-      const scene = currentScene as MainMenu
-      scene.moveLogo(({ x, y }) => setSpritePosition({ x, y }))
-    }
-  }
-
-  const addSprite = () => {
-    if (!game.current || !currentScene) return
-
-    const scene = currentScene as MainMenu
-
-    // Add more stars
-    const x = Phaser.Math.Between(64, scene.scale.width - 64)
-    const y = Phaser.Math.Between(64, scene.scale.height - 64)
-
-    //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
-    const star = scene.add.sprite(x, y, 'star')
-
-    //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
-    //  You could, of course, do this from within the Phaser Scene code, but this is just an example
-    //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
-    scene.add.tween({
-      targets: star,
-      duration: 500 + Math.random() * 1000,
-      alpha: 0,
-      yoyo: true,
-      repeat: -1,
-    })
-  }
 
   useLayoutEffect(() => {
     if (game.current === null) game.current = StartGame('game-container')
@@ -64,9 +20,6 @@ export default function PhaserContainer() {
   }, [])
 
   useEffect(() => {
-    if (currentScene?.scene.key !== 'MainMenu') setIsMainMenu(false)
-    else setIsMainMenu(true)
-
     EventBus.on('current-scene-ready', (scene: Scene) => {
       setCurrentScene(scene)
     })
@@ -76,12 +29,28 @@ export default function PhaserContainer() {
     }
   }, [currentScene])
 
+  const handleWater = () => {}
+  const handleFeed = () => {}
+  const handlePlant = () => {}
+
   return (
     <main className="relative flex h-dvh w-full items-start justify-center p-12">
       <div
         id="game-container"
         className="absolute inset-0 z-0 flex items-center justify-center"
       />
+
+      <div className="z-10 place-self-end flex gap-4">
+        <button className="w-24 bg-lime-200 p-4" onClick={handleWater}>
+          Water
+        </button>
+        <button className="w-24 bg-lime-200 p-4" onClick={handleFeed}>
+          Feed
+        </button>
+        <button className="w-24 bg-lime-200 p-4" onClick={handlePlant}>
+          Plant
+        </button>
+      </div>
     </main>
   )
 }

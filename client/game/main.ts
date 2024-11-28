@@ -1,4 +1,4 @@
-import { AUTO, Game } from 'phaser'
+import { AUTO, Game, Scale } from 'phaser'
 import { Boot } from './scenes/Boot'
 import { Preloader } from './scenes/Preloader'
 import { SpriteGame } from './scenes/SpriteGame'
@@ -6,11 +6,19 @@ import { GameOver } from './scenes/GameOver'
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
+const viewportWidth = window.innerWidth
+const viewportHeight = window.innerHeight
+
+
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
-  width: 1024,
-  height: 768,
-  parent: 'game-container',
+  scale: {
+    parent: 'game-container',
+    width: viewportWidth,
+    height: viewportHeight,
+    mode: Scale.EXPAND,
+    autoCenter: Scale.CENTER_BOTH,
+  },
   physics: {
     default: 'arcade',
     arcade: {
@@ -22,8 +30,4 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: [Boot, Preloader, SpriteGame, GameOver],
 }
 
-const StartGame = (parent: string) => {
-  return new Game({ ...config, parent })
-}
-
-export default StartGame
+export default (parent: string) => new Game({ ...config, parent })

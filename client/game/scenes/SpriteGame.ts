@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import Phaser, { Physics, GameObjects, Types, Scene } from 'phaser'
 import { EventBus } from '../EventBus'
 
@@ -10,10 +11,10 @@ export class SpriteGame extends Scene {
   score!: number
   scoreText!: GameObjects.Text
   cursors!: Types.Input.Keyboard.CursorKeys
-  gameOver!: boolean
 
   constructor() {
     super('SpriteGame')
+    this.score = 0
   }
 
   preload() {
@@ -21,22 +22,45 @@ export class SpriteGame extends Scene {
   }
 
   create() {
-    this.score = 0
-    this.background = this.add.image(512, 384, 'sky')
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
 
-    this.player = this.physics.add.sprite(100, 450, 'dude')
+    this.background = this.add.image(
+      viewportWidth / 2,
+      viewportHeight / 2,
+      'sky',
+    )
 
     this.platforms = this.physics.add.staticGroup()
-
     this.platforms.create(400, 568, 'ground').setScale(2).refreshBody()
-
     this.platforms.create(600, 400, 'ground')
     this.platforms.create(50, 250, 'ground')
     this.platforms.create(750, 220, 'ground')
 
+    this.player = this.physics.add.sprite(100, 450, 'dude')
     this.player.setBounce(0.2)
     this.player.setCollideWorldBounds(true)
-    this.physics.add.collider(this.player, this.platforms)
+
+    this.stars = this.physics.add.group({
+      key: 'star',
+      repeat: 11,
+      setXY: { x: 12, y: 0, stepX: 70 },
+    })
+    this.stars.getChildren().forEach((child: GameObjects.GameObject) => {
+      const _child = child as Physics.Arcade.Sprite
+      _child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+    })
+
+    this.bombs = this.physics.add.group()
+
+    this.scoreText = this.add.text(16, 16, 'score: 0', {
+      fontSize: '32px',
+      color: '#000', //was fill before
+    })
+
+    if (this.input.keyboard) {
+      this.cursors = this.input.keyboard?.createCursorKeys()
+    }
 
     this.anims.create({
       // left sprite animation (uses frames 0-3) runs at 10 frames per second
@@ -61,25 +85,6 @@ export class SpriteGame extends Scene {
       repeat: -1,
     })
 
-    this.stars = this.physics.add.group({
-      key: 'star',
-      repeat: 11,
-      setXY: { x: 12, y: 0, stepX: 70 },
-      // stepX means all children will be placed evently accross the screen
-    })
-
-    this.stars.children.iterate((child: GameObjects.GameObject) => {
-      const _child = child as Physics.Arcade.Sprite
-      _child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)) // randomly bounce
-      return null
-    })
-
-    this.bombs = this.physics.add.group()
-
-    if (this.input.keyboard?.createCursorKeys()) {
-      this.cursors = this.input.keyboard?.createCursorKeys()
-    }
-
     this.physics.add.collider(this.player, this.platforms)
     this.physics.add.collider(this.stars, this.platforms)
     this.physics.add.collider(this.bombs, this.platforms)
@@ -88,22 +93,17 @@ export class SpriteGame extends Scene {
       this.player,
       this.bombs,
       this.hitBomb,
-      () => {},
+      undefined,
       this,
     )
 
-    this.physics.add.collider(this.player, this.bombs, undefined)
     this.physics.add.overlap(
       this.player,
       this.stars,
       this.collectStar,
-      () => {},
+      undefined,
       this,
     )
-    this.scoreText = this.add.text(16, 16, 'score: 0', {
-      fontSize: '32px',
-      color: '#000', //was fill before
-    })
 
     EventBus.emit('current-scene-ready', this)
   }
@@ -124,8 +124,11 @@ export class SpriteGame extends Scene {
     }
   }
 
-  collectStar(player: Physics.Arcade.Sprite, star: Physics.Arcade.Sprite) {
-    star.disableBody(true, true)
+  collectStar(player: any, star: any) {
+    const _player = player as Physics.Arcade.Sprite
+    const _star = star as Physics.Arcade.Sprite
+
+    _star.disableBody(true, true)
 
     this.score += 10
     this.scoreText.setText('Score: ' + this.score)
@@ -138,7 +141,7 @@ export class SpriteGame extends Scene {
       })
 
       const x =
-        player.x < 400
+        _player.x < 400
           ? Phaser.Math.Between(400, 800)
           : Phaser.Math.Between(0, 400)
 
@@ -149,11 +152,13 @@ export class SpriteGame extends Scene {
     }
   }
 
-  hitBomb(player: Physics.Arcade.Sprite) {
+  hitBomb(player: any) {
+    const _player = player as Physics.Arcade.Sprite
+
     this.physics.pause()
-    player.setTint(0xff0000)
-    player.anims.play('turn')
-    this.gameOver = true
+    _player.setTint(0xff0000)
+    _player.anims.play('turn')
+
     this.scene.start('GameOver')
   }
 }
