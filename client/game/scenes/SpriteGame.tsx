@@ -21,6 +21,7 @@ export class SpriteGame extends Scene {
   }
 
   create() {
+    this.score = 0
     this.background = this.add.image(512, 384, 'sky')
 
     this.player = this.physics.add.sprite(100, 450, 'dude')
@@ -95,7 +96,7 @@ export class SpriteGame extends Scene {
     this.physics.add.overlap(
       this.player,
       this.stars,
-      this.collectStar as ShutTheFuckUpTypescript,
+      this.collectStar,
       () => {},
       this,
     )
