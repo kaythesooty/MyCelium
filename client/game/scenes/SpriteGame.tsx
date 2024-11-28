@@ -154,9 +154,6 @@ export class SpriteGame extends Scene {
     player.setTint(0xff0000)
     player.anims.play('turn')
     this.gameOver = true
-  }
-
-  changeScene() {
-    this.scene.start('MainMenu')
+    this.scene.start('GameOver')
   }
 }

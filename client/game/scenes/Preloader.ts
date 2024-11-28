@@ -1,7 +1,6 @@
 import { Scene } from 'phaser'
 
 export class Preloader extends Scene {
-  
   constructor() {
     super('Preloader')
   }
@@ -29,16 +28,14 @@ export class Preloader extends Scene {
 
     this.load.image('logo', 'logo.png')
     // this.load.image('star', 'star.png')
-    
-      
-      this.load.image('ground', 'platform.png')
-      this.load.image('star', 'star.png')
-      this.load.image('bomb', 'bomb.png')
-      this.load.spritesheet('dude', 'dude.png', {
-        frameWidth: 32,
-        frameHeight: 48,
-      })
-    
+
+    this.load.image('ground', 'platform.png')
+    this.load.image('star', 'star.png')
+    this.load.image('bomb', 'bomb.png')
+    this.load.spritesheet('dude', 'dude.png', {
+      frameWidth: 32,
+      frameHeight: 48,
+    })
   }
 
   create() {

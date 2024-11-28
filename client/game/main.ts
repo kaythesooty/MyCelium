@@ -2,6 +2,7 @@ import { AUTO, Game } from 'phaser'
 import { Boot } from './scenes/Boot'
 import { Preloader } from './scenes/Preloader'
 import { SpriteGame } from './scenes/SpriteGame'
+import { GameOver } from './scenes/GameOver'
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -18,7 +19,7 @@ const config: Phaser.Types.Core.GameConfig = {
     },
   },
   backgroundColor: '#028af8',
-  scene: [Boot, Preloader, SpriteGame],
+  scene: [Boot, Preloader, SpriteGame, GameOver],
 }
 
 const StartGame = (parent: string) => {

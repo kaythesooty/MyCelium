@@ -82,22 +82,6 @@ export default function PhaserContainer() {
         id="game-container"
         className="absolute inset-0 z-0 flex items-center justify-center"
       />
-
-      <div className="z-10 p-8 flex bg-stone-800 text-stone-100">
-        <button className="button" onClick={changeScene}>
-          Change Scene
-        </button>
-        <button disabled={!isMainMenu} className="button" onClick={moveSprite}>
-          Toggle Movement
-        </button>
-        <button className="button" onClick={addSprite}>
-          Add New Sprite
-        </button>
-        <div className="spritePosition">
-          Sprite Position:
-          <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-        </div>
-      </div>
     </main>
   )
 }
