@@ -1,4 +1,9 @@
 export default [
+  // {
+  //   title: 'Welcome to Fungipedia',
+  //   img: '/assets/fungipedia.png',
+  //   description: 'Seek and ye shall find'
+  // },
   {
     name: 'Silly-kitty bolete (Ferruktus felis)',
     poisonious: 'Watch out for the sick bolete, close proximity can cause blindness',
@@ -6,26 +11,20 @@ export default [
     description: ' It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold. It is mostly eaten boiled to kill off any illnesses growing on it, and is found to be quite popular among canines',
     stages: [
       {
-        stage: 'Spore', 
-        img: '',
-        status: 'Healthy',
-        notes: ''
-      },
-      {
         stage: 'Button', 
-        img: '',
+        img: '/assets/mushroom1.png',
         status: 'Healthy',
-        notes: ''
+        notes: 'A vibrant red and white fully grown mushroom!'
       },
       {
         stage: 'Teen', 
-        img: '',
+        img: '/assets/mushroom2.png',
         status: 'Healthy',
-        notes: ''
+        notes: 'A vibrant red and white fully grown mushroom!'
       },
       {
         stage: 'Mature', 
-        img: '',
+        img: '/assets/mushroom3.png',
         status: 'Healthy',
         notes: 'A vibrant red and white fully grown mushroom!'
       },

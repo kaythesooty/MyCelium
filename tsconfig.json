@@ -18,6 +18,7 @@
       "@assets/*": ["client/assets/*"],
       "@components/*": ["client/components/*"],
       "@context/*": ["client/context/*"],
+      "@data/*": ["client/data/*"],
       "@game/*": ["client/game/*"],
       "@hooks/*": ["client/hooks/*"],
       "@pages/*": ["client/pages/*"],

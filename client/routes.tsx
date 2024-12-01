@@ -1,15 +1,15 @@
 import { createRoutesFromElements, Route } from 'react-router-dom'
 
-import GamePage from '@pages/GamePage'
-import LoginPage from '@pages/LoginPage'
-import RegisterPage from '@pages/RegisterPage'
-import ForgotPage from '@pages/ForgotPage'
+import Game from '@components/Game'
+import LoginPage from '@pages/login'
+import RegisterPage from '@pages/register'
+import ForgotPage from '@pages/forgot-password'
 
 export default createRoutesFromElements(
   <>
-    <Route index element={<GamePage />} />
-    <Route path='login' element={<LoginPage />} />
-    <Route path='register' element={<RegisterPage />} />
-    <Route path='forgot' element={<ForgotPage />} />
+    <Route index element={<Game />} />
+    <Route path="login" element={<LoginPage />} />
+    <Route path="register" element={<RegisterPage />} />
+    <Route path="forgot" element={<ForgotPage />} />
   </>,
 )

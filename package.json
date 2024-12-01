@@ -1,7 +1,7 @@
 {
   "name": "my-celium",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "server/index.js",
   "license": "MIT",
   "keywords": [
@@ -11,7 +11,7 @@
     "test": "vitest",
     "start": "node dist/server.js",
     "dev": "run-p dev:client dev:server",
-    "dev:client": "vite",
+    "dev:client": "vite --host",
     "dev:server": "tsx watch server/index.ts",
     "build": "run-s build:client build:server",
     "build:client": "vite build",

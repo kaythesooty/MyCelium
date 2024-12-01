@@ -15,6 +15,7 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, './client/assets'),
       '@components': path.resolve(__dirname, './client/components'),
       '@context': path.resolve(__dirname, './client/context'),
+      '@data': path.resolve(__dirname, './client/data'),
       '@game': path.resolve(__dirname, './client/game'),
       '@hooks': path.resolve(__dirname, './client/hooks'),
       '@pages': path.resolve(__dirname, './client/pages'),

@@ -29,12 +29,23 @@ export class Preloader extends Scene {
     this.load.image('logo', 'logo.png')
     // this.load.image('star', 'star.png')
 
-    this.load.image('ground', 'platform.png')
-    this.load.image('star', 'star.png')
+    this.load.image('grass', 'grass_tileset.png')
+    this.load.image('dry dirt', 'dirt_tileset.png')
+    this.load.image('dirt border', 'dirt_border.png')
     this.load.image('bomb', 'bomb.png')
     this.load.spritesheet('dude', 'dude.png', {
       frameWidth: 32,
       frameHeight: 48,
+    })
+
+    // User interface
+    this.load.image('watering can', 'watering_can.png')
+    this.load.image('planting tool', 'planting_tool.png')
+
+    // Mushrooms
+    this.load.spritesheet('red mushroom', 'mushroom_red.png', {
+      frameWidth: 150,
+      frameHeight: 150,
     })
   }
 
@@ -43,6 +54,6 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start('SpriteGame')
+    this.scene.start('Mushrooms')
   }
 }

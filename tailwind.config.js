@@ -2,7 +2,12 @@
 export default {
   content: ['./index.html', './client/**/*.tsx'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        game: ['Irish Grover', 'cursive'],
+        medieval: ['MedievalSharp', 'serif'], 
+      },
+    },
   },
   plugins: [],
 }

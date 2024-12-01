@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
-import { Auth0Provider } from '@auth0/auth0-react'
+// import { Auth0Provider } from '@auth0/auth0-react'
 import routes from './routes.tsx'
 
 export const router = createBrowserRouter(routes, {
@@ -15,15 +15,15 @@ export const router = createBrowserRouter(routes, {
 
 document.addEventListener('DOMContentLoaded', () => {
   createRoot(document.getElementById('app') as HTMLElement).render(
-    <Auth0Provider
-      domain=""
-      clientId=""
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-        audience: '',
-      }}
-    >
+    // <Auth0Provider
+    //   domain=""
+    //   clientId=""
+    //   authorizationParams={{
+    //     redirect_uri: window.location.origin,
+    //     audience: '',
+    //   }}
+    // >
       <RouterProvider router={router} future={{ v7_startTransition: true }} />
-    </Auth0Provider>,
+    // </Auth0Provider>,
   )
 })
