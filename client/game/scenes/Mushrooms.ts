@@ -26,14 +26,14 @@ export class Mushrooms extends Phaser.Scene {
   TILE_SIZE = 150
   WORLD_WIDTH = 10
   WORLD_HEIGHT = 6
-  IS_DEBUG = true
+  IS_DEBUG = false
   GROWTHSPEED = 10 // how long in seconds it takes a mushroom to fully grow given optimal conditions
   DRYSPEED = 0.1 // how long in seconds it takes a dirt tile to dry out
 
   // camera!: Camera
   camera!: Phaser.Cameras.Scene2D.Camera
   pointer!: Phaser.Input.Pointer
-  userState!: UserState
+  userState: UserState = UserState.Idle
 
   wateringCan!: Phaser.GameObjects.Image
   wateringCanX!: number
@@ -181,11 +181,9 @@ export class Mushrooms extends Phaser.Scene {
       const worldPoint = pointer.positionToCamera(
         this.camera,
       ) as Phaser.Math.Vector2
-      const tileX = this.foreground?.worldToTileX(worldPoint.x)
-      const tileY = this.foreground?.worldToTileY(worldPoint.y)
 
-      this.hoveredTileX = tileX || 0
-      this.hoveredTileY = tileY || 0
+      this.hoveredTileX = this.foreground?.worldToTileX(worldPoint.x) || 0
+      this.hoveredTileY = this.foreground?.worldToTileY(worldPoint.y) || 0
 
       if (this.userState === UserState.Watering) {
         this.wateringCan.setPosition(worldPoint.x + 50, worldPoint.y - 50)
@@ -198,6 +196,8 @@ export class Mushrooms extends Phaser.Scene {
   }
 
   update(time: number, delta: number) {
+    this.input.setDefaultCursor('auto')
+
     this.children.each((child) => {
       if (child.type === 'Text') child.destroy() // Destroying debug text
       if (child.type === 'Graphics') child.destroy()
@@ -240,10 +240,40 @@ export class Mushrooms extends Phaser.Scene {
       }
 
       this.mushroomtimer += delta
-      while (this.mushroomtimer > 100 * this.GROWTHSPEED) {
-        this.mushroomData.forEach((mushroom) => mushroom.grow(1))
-        this.mushroomtimer -= 100 * this.GROWTHSPEED
+      while (this.mushroomtimer > 250 * this.GROWTHSPEED) {
+        this.mushroomData.forEach((mushroom) => mushroom.grow(3))
+        this.mushroomtimer -= 250 * this.GROWTHSPEED
       }
+    }
+
+    if (this.userState === UserState.Idle) {
+      const hoverX = this.hoveredTileX
+      const hoverY = this.hoveredTileY
+      if (!hoverX || !hoverY || !this.dirtLayerData[hoverY][hoverX]) return
+
+      this.children.each((child) => {
+        if (child.type === 'Graphics') child.destroy()
+      })
+
+      const tileXWorld = hoverX * this.TILE_SIZE
+      const tileYWorld = hoverY * this.TILE_SIZE
+      const graphics = this.add.graphics()
+      // graphics.fillStyle(0xffffff, 0.1)
+      // graphics.fillRect(tileXWorld, tileYWorld, this.TILE_SIZE, this.TILE_SIZE)
+
+      this.mushroomData.forEach((mushroom) => {
+        if (mushroom.isExistent(tileXWorld, tileYWorld)) {
+          this.input.setDefaultCursor('pointer')
+
+          graphics.fillStyle(0xffffff, 0.3)
+          graphics.fillRect(
+            tileXWorld,
+            tileYWorld,
+            this.TILE_SIZE,
+            this.TILE_SIZE,
+          )
+        }
+      })
     }
 
     if (this.userState === UserState.Watering) {
@@ -290,8 +320,8 @@ export class Mushrooms extends Phaser.Scene {
   startWatering(reactCallback: Dispatch<React.SetStateAction<string | null>>) {
     this.userState = UserState.Watering
     reactCallback('Press Right Mouse Button to stop watering')
-    this.input.setDefaultCursor('none')
     this.camera.zoomTo(2.2, 100)
+    if (!this.IS_DEBUG) this.input.setDefaultCursor('none')
 
     this.wateringCan = this.add.image(-100, -100, 'watering can')
     this.wateringCan.setScale(0.5)
@@ -313,6 +343,8 @@ export class Mushrooms extends Phaser.Scene {
             this.dirtLayerData[x][y].isWatered = false
           }
         }
+
+        this.input.off('pointerdown')
       }
     })
   }
@@ -323,14 +355,14 @@ export class Mushrooms extends Phaser.Scene {
   ) {
     this.userState = UserState.Planting
     reactCallback('Press Right Mouse Button to stop planting')
-    this.input.setDefaultCursor('none')
     this.camera.zoomTo(2.2, 100)
+    if (!this.IS_DEBUG) this.input.setDefaultCursor('none')
 
     this.plantingTool = this.add.image(-100, -100, 'planting tool')
     this.plantingTool.setScale(0.5)
     this.plantingTool.depth = 3
 
-    this.plantingMushroom = this.add.image(-100, -100, 'red mushroom', 3)
+    this.plantingMushroom = this.add.image(-100, -100, mushroom, 3)
     this.plantingMushroom.setScale(1)
     this.plantingMushroom.depth = 2
 
@@ -338,11 +370,14 @@ export class Mushrooms extends Phaser.Scene {
       if (this.pointer.leftButtonDown()) {
         if (!this.dirtLayerData[this.hoveredTileY][this.hoveredTileX]) return
 
-        const tileXWorld = this.hoveredTileX * this.TILE_SIZE
-        const tileYWorld = this.hoveredTileY * this.TILE_SIZE
-
         this.mushroomData.push(
-          new Mushroom(this, tileXWorld, tileYWorld, mushroom),
+          new Mushroom(
+            this,
+            this.hoveredTileX,
+            this.hoveredTileY,
+            this.TILE_SIZE,
+            mushroom,
+          ),
         )
         console.log(this.mushroomData)
       }

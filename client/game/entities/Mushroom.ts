@@ -6,11 +6,22 @@ export class Mushroom extends GameObjects.Sprite {
   mushroom!: GameObjects.Sprite
   growth!: number
 
-  constructor(scene: Scene, x: number, y: number, mushroom: MushroomName) {
-    super(scene, x, y, mushroom, 0)
+  constructor(
+    scene: Scene,
+    x: number,
+    y: number,
+    size: number,
+    mushroom: MushroomName,
+  ) {
+    super(scene, x * size, y * size, mushroom, 0)
 
     this.scene = scene
-    this.mushroom = this.scene.add.sprite(x + 80, y + 50, mushroom)
+    this.mushroom = this.scene.add.sprite(
+      x * size + 80,
+      y * size + 50,
+      mushroom,
+    )
+    this.mushroom.depth = 1
     this.growth = 0
   }
 
@@ -22,6 +33,10 @@ export class Mushroom extends GameObjects.Sprite {
     else this.mushroom.setFrame(0)
 
     // Increasing growth
-    this.growth += 1 + multiplier
+    this.growth += multiplier
+  }
+
+  isExistent(x: number, y: number) {
+    return this.x === x && this.y === y
   }
 }
