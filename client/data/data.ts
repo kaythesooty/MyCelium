@@ -1,51 +1,98 @@
-export default [
-  // {
-  //   title: 'Welcome to Fungipedia',
-  //   img: '/assets/fungipedia.png',
-  //   description: 'Seek and ye shall find'
-  // },
+const data = [
   {
-    name: 'Silly-kitty bolete (Ferruktus felis)',
-    poisonious: 'Watch out for the sick bolete, close proximity can cause blindness',
-    location: 'A common species of the Ferruktus family, the silly-kitty bolete is found in the desert close to oases',
-    description: ' It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold. It is mostly eaten boiled to kill off any illnesses growing on it, and is found to be quite popular among canines',
-    stages: [
-      {
-        stage: 'Button', 
-        img: '/assets/mushroom1.png',
-        status: 'Healthy',
-        notes: 'A vibrant red and white fully grown mushroom!'
-      },
-      {
-        stage: 'Teen', 
-        img: '/assets/mushroom2.png',
-        status: 'Healthy',
-        notes: 'A vibrant red and white fully grown mushroom!'
-      },
-      {
-        stage: 'Mature', 
-        img: '/assets/mushroom3.png',
-        status: 'Healthy',
-        notes: 'A vibrant red and white fully grown mushroom!'
-      },
-      {
-        stage: 'Sick', 
-        img: '',
-        status: 'Unhealthy',
-        notes: 'The colour apears black around the edges, avoid contact.'
-      },
-      {
-        stage: 'Dehydrated', 
-        img: '',
-        status: 'Unhealthy',
-        notes: 'The soil is a light brown colour, It has dried right out. Needs water.'
-      },
-      {
-        stage: 'Hungry', 
-        img: '',
-        status: 'Malnourished',
-        notes: ''
-      }
-    ]
-  }
+    type: 'welcome',
+    content: {
+      title: 'Welcome to Fungipedia',
+      description: '',
+      img: '/assets/fungipedia.png',
+    },
+  },
+  {
+    type: 'index',
+    content: {
+      title: 'Index',
+      mushrooms: [
+        { name: 'Silly-kitty bolete'},
+        { name: 'Conocybula' },
+        { name: 'Galerina'},
+        { name: 'Gymnopilus'},
+      ],
+    },
+  },
+  {
+    type: 'tutorial',
+    content: {
+      title: 'Tutorial',
+      description: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
+      specifics: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
+      care: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.'
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'mushroom3.png',
+      name: 'Silly-kitty bolete',
+      family: 'Ferruktus felis',
+      properties: 'Edible, tasty',
+      poisonous: 'POISONSOUS',
+      location: 'Found in damp woods, hidden amongst the vegetation of the forest floor',
+      description:
+      'A tall mushroom sporting a narrow stem, and a wide cap speckled in orange, black, and white. It’s a delicious mushroom, but only when boiled beforehand to neutralise its potent toxins. It’ll fetch a solid price at any market given its popularity amongst discerning mycophiles.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'morel.png',
+      name: 'Silly-kitty bolete',
+      family: '(Ferruktus felis)',
+      properties: 'Edible, tasty',
+      poisonous: 'POISONSOUS',
+      location: 'Found in the desert close to oases',
+      description:
+        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'puffball.png',
+      name: 'Silly-kitty bolete',
+      family: '(Ferruktus felis)',
+      properties: 'Edible, tasty',
+      poisonous: 'POISONSOUS',
+      location: 'Found in the desert close to oases',
+      description:
+        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'mushroom3.png',
+      name: 'Silly-kitty bolete',
+      family: '(Ferruktus felis)',
+      properties: 'Edible, tasty',
+      poisonous: 'POISONSOUS',
+      location: 'Found in the desert close to oases',
+      description:
+        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'mushroom3.png',
+      name: 'Silly-kitty bolete',
+      family: '(Ferruktus felis)',
+      properties: 'Edible, tasty',
+      poisonous: 'POISONSOUS',
+      location: 'Found in the desert close to oases',
+      description:
+        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
+    },
+  },
 ]
+
+export default data
