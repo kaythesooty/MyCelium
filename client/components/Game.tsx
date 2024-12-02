@@ -1,5 +1,5 @@
-import PhaserContainer from './layers/PhaserContainer'
-import UserInterface from './layers/UserInterface'
+import PhaserContainer from './PhaserContainer'
+import UserInterface from './UserInterface'
 import '@styles/phaser.scss'
 
 export default function GameContainer() {

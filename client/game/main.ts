@@ -1,8 +1,5 @@
 import { AUTO, Game, Scale } from 'phaser'
-import { Boot } from './scenes/Boot'
 import { Preloader } from './scenes/Preloader'
-// import { SpriteGame } from './scenes/SpriteGame'
-import { GameOver } from './scenes/GameOver'
 import { Mushrooms } from './scenes/Mushrooms'
 
 //  Find out more information about the Game Config at:
@@ -27,7 +24,7 @@ const config: Phaser.Types.Core.GameConfig = {
     },
   },
   backgroundColor: '#028af8',
-  scene: [Boot, Preloader, Mushrooms, GameOver],
+  scene: [Preloader, Mushrooms],
 }
 
 export default (parent: string) => new Game({ ...config, parent })

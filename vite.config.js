@@ -22,6 +22,8 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, './client/styles'),
       '@utils': path.resolve(__dirname, './client/utils'),
       '@models': path.resolve(__dirname, './models'),
+      '@enums': path.resolve(__dirname, './models/enums.ts'),
+      '@interfaces': path.resolve(__dirname, './models/interfaces.ts'),
     },
   },
 })

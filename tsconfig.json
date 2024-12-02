@@ -24,7 +24,9 @@
       "@pages/*": ["client/pages/*"],
       "@styles/*": ["client/styles/*"],
       "@utils/*": ["client/utils/*"],
-      "@models/*": ["models/*"]
+      "@models/*": ["models/*"],
+      "@enums": ["models/enums.ts"],
+      "@interfaces": ["models/interfaces.ts"],
     }
   }
 }

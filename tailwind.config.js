@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        game: ['Irish Grover', 'cursive'],
+        game: ['Big Bottom Cartoon', 'cursive'],
         medieval: ['MedievalSharp', 'serif'], 
+      },
+      backgroundImage: {
+        'texture': "url('/assets/bg_texture.png')",
       },
     },
   },

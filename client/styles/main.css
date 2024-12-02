@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Irish Grover&display=swap');
+@font-face {
+  font-family: 'Big Bottom Cartoon';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/mushroom.ttf') format('truetype');
+}
 
 @tailwind base;
 @tailwind components;

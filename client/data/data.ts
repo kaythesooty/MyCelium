@@ -4,7 +4,7 @@ const data = [
     content: {
       title: 'Welcome to Fungipedia',
       description: '',
-      img: '/assets/fungipedia.png',
+      img: '/assets/sprite_fungipedia.png',
     },
   },
   {
@@ -12,10 +12,12 @@ const data = [
     content: {
       title: 'Index',
       mushrooms: [
-        { name: 'Silly-kitty bolete'},
-        { name: 'Conocybula' },
-        { name: 'Galerina'},
-        { name: 'Gymnopilus'},
+        { name: "Lover's redcap" },
+        { name: 'Hollow Snakehead' },
+        { name: "Fool's Bolete" },
+        { name: 'Cerulean Bonnet' },
+        { name: 'Cumulo Puffball' },
+        { name: 'Silly-kitty Bolete' },
       ],
     },
   },
@@ -23,74 +25,96 @@ const data = [
     type: 'tutorial',
     content: {
       title: 'Tutorial',
-      description: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
-      specifics: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
-      care: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.'
+      description:
+        "Welcome to MyCelium! Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
+      specifics:
+        'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
+      care: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
+    },
+  },
+
+  {
+    type: 'mushroom',
+    content: {
+      img: 'item_red_mushroom.png',
+      name: "Lover's Redcap",
+      family: '(Amantes vertice rubrum)',
+      properties: 'edible, medicinal',
+      toxicity: 'N/A',
+      location:
+        'Found within moist meadows, hiding in shaded areas where the morning dew lingers throughout the day',
+      description:
+        'A stout mushroom with a thick and hardy stem, and a conical crimson cap covered in beautiful white spots. It is also notable for being one of the few mushrooms that is entirely non-toxic and can therefore be eaten without preparation. It tends to be sold as curative, improving mood and reinvigorating those who can stand its admittedly bitter taste.',
     },
   },
   {
     type: 'mushroom',
     content: {
-      img: 'mushroom3.png',
+      img: 'item_morel.png',
+      name: 'Hollow Snakehead',
+      family: '(Cavae anguis caput morchella)',
+      properties: 'edible, tasty',
+      toxicity: 'poisonous',
+      location:
+        'Often spotted under the shade of tree canopies , utilising decaying wood to sustain itself',
+      description:
+        "A thin, pointed mushroom with a sturdy neck-like stem, and a thoroughly perforated cap.The holes that are this morel's namesake nestle away pockets of a potent toxin, which can only be neutralised by thoroughly cooking them. The Snakehead is a highly regarded delicacy that can prove difficult to grow in many biomes, and as such will always have people clambering to get their hands on them.",
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'item_bolete.png',
+      name: "Fool's Bolete",
+      family: '(boletus stultus)',
+      properties: 'magic, deadly',
+      toxicity: 'poisonous',
+      location:
+        'Found amongst long dead carcasses of any variety,subsisting off of the dry bones',
+      description:
+        'A deceptively archetypal bolete, complete with an innocuous brown cap and stubby stem.This fungi excels in the art of mimicry, looking virtually indistinct from many other edible mushrooms of its variety. What sets it apart is its utterly lethal poison, which has no known antidote as of yet, and there may never be one given its mysterious necrotic nature. This makes it a favourite amongst assassins and warlocks alike, as well as a fitting last meal for those moronic enough to eat something harvested from remains.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'item_blue_pinkgill.png',
+      name: 'Cerulean Bonnet',
+      family: '(cserulus mitram)',
+      properties: 'magic, mysterious',
+      toxicity: 'unknown',
+      location:
+        'known to prefer drier areas,  this mushroom is most commonly found wherever deadwood is plentiful ',
+      description:
+        'Characterised by an exceedingly thin stem and comparatively large cap, this species flaunts a magnificent cobalt colouration.These little colorful champignons are full of mystique,with little being known about their biology or potential uses. So far not a single soul has had the stomach nor the bravery to ingest one of these for long enough to find out what effects it may have on the human body. It has become notorious over the years for being a pain to grow without near perfect conditions, so it can still fetch a dandy price if you can find a curious (and strange) enough buyer.',
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'item_puffball.png',
+      name: 'Cumulo Puffball',
+      family: '(cumulo vento-pila)',
+      properties: 'edible, tasty',
+      toxicity: 'poisonous',
+      location:
+        'Thriving within warmer climates,this particular puffball prefers to bask in the sun surrounded by decomposing vegetation',
+      description:
+        "Renowned for its size relative to other fungi, the puffball also stands out amongst the crowd because of its distinct lack of any real exterior form, foregoing the usual stem-cap arrangement for a more amorphous, cloud-like approach. This species in particular is notable for being fairly volatile, dispersing its toxic spores as a defense mechanism if it is disturbed too much before adequate preparation/disarmament. They are very popular amongst traders given just how many spores you can produce from a single body, but consequently don't sell for huge amounts.",
+    },
+  },
+  {
+    type: 'mushroom',
+    content: {
+      img: 'item_red_mushroom.png',
       name: 'Silly-kitty bolete',
       family: 'Ferruktus felis',
       properties: 'Edible, tasty',
-      poisonous: 'POISONSOUS',
-      location: 'Found in damp woods, hidden amongst the vegetation of the forest floor',
+      poisonous: 'POISONOUS',
+      location:
+        'Found in damp woods, hidden amongst the vegetation of the forest floor',
       description:
-      'A tall mushroom sporting a narrow stem, and a wide cap speckled in orange, black, and white. It’s a delicious mushroom, but only when boiled beforehand to neutralise its potent toxins. It’ll fetch a solid price at any market given its popularity amongst discerning mycophiles.',
-    },
-  },
-  {
-    type: 'mushroom',
-    content: {
-      img: 'morel.png',
-      name: 'Silly-kitty bolete',
-      family: '(Ferruktus felis)',
-      properties: 'Edible, tasty',
-      poisonous: 'POISONSOUS',
-      location: 'Found in the desert close to oases',
-      description:
-        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
-    },
-  },
-  {
-    type: 'mushroom',
-    content: {
-      img: 'puffball.png',
-      name: 'Silly-kitty bolete',
-      family: '(Ferruktus felis)',
-      properties: 'Edible, tasty',
-      poisonous: 'POISONSOUS',
-      location: 'Found in the desert close to oases',
-      description:
-        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
-    },
-  },
-  {
-    type: 'mushroom',
-    content: {
-      img: 'mushroom3.png',
-      name: 'Silly-kitty bolete',
-      family: '(Ferruktus felis)',
-      properties: 'Edible, tasty',
-      poisonous: 'POISONSOUS',
-      location: 'Found in the desert close to oases',
-      description:
-        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
-    },
-  },
-  {
-    type: 'mushroom',
-    content: {
-      img: 'mushroom3.png',
-      name: 'Silly-kitty bolete',
-      family: '(Ferruktus felis)',
-      properties: 'Edible, tasty',
-      poisonous: 'POISONSOUS',
-      location: 'Found in the desert close to oases',
-      description:
-        'It is a tall mushroom with a wide cap spotted with orange, black, and white. It is a very tasty mushroom and thus is a popular food item at any market where it is sold.',
+        "A tall mushroom sporting a narrow stem, and a wide cap speckled in orange, black, and white. It's a delicious mushroom, but only when boiled beforehand to neutralise its potent toxins. It’ll fetch a solid price at any market given its popularity amongst discerning mycophiles.",
     },
   },
 ]
