@@ -16,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Scale.ENVELOP,
     autoCenter: Scale.CENTER_BOTH,
   },
-  backgroundColor: '#028af8',
+  backgroundColor: '#C8CE83',
   scene: [Preloader, Mushrooms],
 }
 
