@@ -1,51 +1,25 @@
-import { Inventory } from '@models/inventory'
-import { useState } from 'react'
+import { Mushrooms } from '@game/scenes/Mushrooms'
+import { InventoryItem } from '@models/interfaces'
+import { useState, useEffect } from 'react'
 
-const playerInventory: Inventory = [
-  {
-    item: {
-      name: 'Lovers Redcap',
-      img: '/assets/item_red_mushroom.png',
-      type: 'Cap',
-      value: 10,
-      description: 'It do be a cap doe',
-    },
-    quantity: 20,
-  },
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-]
-
-export default function ChestPopup() {
-  const [inventory] = useState<Inventory>(playerInventory)
+export default function ChestPopup({
+  sceneData,
+}: {
+  sceneData: Mushrooms | null
+}) {
+  const [inventory, setInventory] = useState<InventoryItem[]>([])
   const [selectedTile, setSelectedTile] = useState<number | null>(null)
+  const [scene, setScene] = useState<Mushrooms | null>(null)
+
+  useEffect(() => {
+    setScene(sceneData)
+    const inventoryData = scene?.registry.get('inventory')
+    if (inventoryData) {
+      const length = inventoryData.length
+      for (let i = 0; i < 30 - length; i++) inventoryData.push(null)
+      setInventory(inventoryData)
+    }
+  }, [sceneData, scene])
 
   return (
     <div className="flex h-[700px] w-[1000px] items-center justify-center bg-[url('/public/assets/bg_paper.png')] opacity-90">

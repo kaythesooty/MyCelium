@@ -77,13 +77,10 @@ export default function Market({ sceneData }: { sceneData: Mushrooms | null }) {
     const existingSlotIndex = inventory.findIndex(
       (slot) => slot?.item.name === shopItem.item.name,
     )
-    console.log(existingSlotIndex)
-    console.log(inventory[existingSlotIndex])
     if (existingSlotIndex >= 0 && inventory[existingSlotIndex] !== null) {
-      console.log('Adding to existent')
       inventory[existingSlotIndex].quantity++
     } else if (inventory[emptySlotIndex]) {
-      console.log('Adding new')
+      inventory[emptySlotIndex].item = shopItem.item
       inventory[emptySlotIndex].quantity = 1
     }
     setInventory([...inventory])
@@ -144,11 +141,13 @@ export default function Market({ sceneData }: { sceneData: Mushrooms | null }) {
               className="flex h-28 w-28 items-center justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
               onClick={() => setShopSlotIndex(index)}
             >
-              <img
-                src={item?.item.img}
-                alt=""
-                className="size-24 translate-x-2"
-              />
+              {item !== null && (
+                <img
+                  src={item?.item.img}
+                  alt=""
+                  className="size-24 translate-x-2"
+                />
+              )}
               {item?.item && (
                 <div className="rounded-lg bg-green-500 pl-2 pr-2">
                   {item.item.value}

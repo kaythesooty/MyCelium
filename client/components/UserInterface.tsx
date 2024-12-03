@@ -145,7 +145,7 @@ export default function UserInterface() {
       )}
 
       <div className={`absolute ${infoData && 'right-96'}`}>
-        {popup === PopupName.Chest && <Chest />}
+        {popup === PopupName.Chest && <Chest sceneData={scene} />}
         {popup === PopupName.Market && <Market sceneData={scene} />}
         {popup === PopupName.Fungipedia && <Fungipedia />}
         {infoData !== null && <Infobox infoData={infoData} />}
