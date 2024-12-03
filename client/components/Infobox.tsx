@@ -14,12 +14,11 @@ export default function Infobox({ infoData }: { infoData: MushroomInfobox }) {
         {infoData.fed === 1 && <div>It&apos;s fertilized.</div>}
         {infoData.fed === 0 && <div>It really needs some fertilizer!</div>}
         <div>
-          {infoData.stage === 4 && <div>It&apos;s fully grown!</div>}
-          {infoData.stage === 3 && (
+          {infoData.stage === 3 && <div>It&apos;s fully grown!</div>}
+          {infoData.stage === 2 && (
             <div>It&apos;s getting close to harvest!</div>
           )}
-          {infoData.stage === 2 && <div>It&apos;s still growing!</div>}
-          {infoData.stage === 1 && <div>It&apos;s a baby!</div>}
+          {infoData.stage === 1 && <div>It&apos;s still growing!</div>}
           {infoData.stage === 0 && <div>It&apos;s been planted!</div>}
         </div>
       </div>
