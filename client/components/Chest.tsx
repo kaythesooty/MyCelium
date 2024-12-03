@@ -26,7 +26,6 @@ export default function ChestPopup({ scene }: { scene: Mushrooms | null }) {
               disabled={chestItemIndex === -1}
               className={`relative flex size-20 items-center justify-center rounded-lg font-game hover:bg-orange-400 ${chestSlot === index ? 'bg-[#f4c78c] outline outline-2 outline-offset-2 outline-[#f4c78c]' : 'bg-[#EAD9C3]'}`}
               onClick={() => {
-                // setMarketSlot(null)
                 setChestSlot(index)
               }}
             >
