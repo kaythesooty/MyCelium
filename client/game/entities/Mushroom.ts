@@ -11,6 +11,8 @@ export class Mushroom extends GameObjects.Sprite {
   size!: number
   growth!: number
   grown = false
+  thirst = 2
+  hunger = 0
 
   constructor(scene: Scene, x: number, y: number, size: number, spore: Spore) {
     super(scene, x * size, y * size, spore.texture, 0)
@@ -37,10 +39,11 @@ export class Mushroom extends GameObjects.Sprite {
     this.growth += value
     // Changing textures
     const growthStage = this.growth / 100
-    this.mushroom.setFrame(clamp(Math.floor(growthStage), 0, 3))
+    this.mushroom.setFrame(clamp(Math.floor(growthStage), 0, 2))
 
-    if (this.growth >= 400) {
+    if (this.growth >= 300) {
       this.grown = true
+      this.mushroom.setFrame(3)
     }
   }
 

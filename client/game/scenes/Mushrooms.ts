@@ -45,6 +45,7 @@ export class Mushrooms extends Phaser.Scene {
   wateringCan!: Phaser.GameObjects.Image
   trowel!: Phaser.GameObjects.Image
   mushroomPreview!: Phaser.GameObjects.Image
+  fertiliser!: Phaser.GameObjects.Image
 
   sporeToPlant!: Spore | null
   infoboxCallback!: Dispatch<React.SetStateAction<MushroomInfobox | null>>
@@ -94,6 +95,8 @@ export class Mushrooms extends Phaser.Scene {
         this.wateringCan.setPosition(worldPoint.x + 30, worldPoint.y - 30)
       } else if (this.gameState === GameState.Planting) {
         this.trowel.setPosition(worldPoint.x + 30, worldPoint.y - 30)
+      } else if (this.gameState === GameState.Feeding) {
+        this.fertiliser.setPosition(worldPoint.x + 30, worldPoint.y - 30)
       }
     })
 
@@ -117,10 +120,20 @@ export class Mushrooms extends Phaser.Scene {
         this.foregroundData[x][y].moist -= newMoist
         if (moistStage <= 0) this.foregroundData[x][y].moist = 0
 
+        const newFood = delta / (300 / this.T_SCALE)
+        this.foregroundData[x][y].nitrogen -= newFood
+        if (this.foregroundData[x][y].nitrogen <= 0) this.foregroundData[x][y].nitrogen = 0
+
         const mushroom = this.foregroundData[x][y].mushroom
+        const tile = this.foregroundData[x][y]
         if (mushroom) {
           // In here should be the multiplier logic for the growth speed
-          const multiplier = 1
+          let multiplier = 1
+          if (Math.floor(tile.moist / 100) === mushroom.thirst) multiplier = 0.5
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1) multiplier = 0.8
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1) multiplier = 0.8
+          else if (Math.floor(tile.moist / 100) != mushroom.thirst) multiplier = 100
+          if (tile.nitrogen == 0) multiplier = 100
 
           mushroom.grow(
             delta / ((10 * this.GROWTHSPEED * multiplier) / this.T_SCALE),
@@ -139,6 +152,17 @@ export class Mushrooms extends Phaser.Scene {
               fontFamily: 'Arial',
               fontSize: '12px',
               color: 'orange',
+            },
+          )
+
+          this.add.text(
+            y * this.TILE_SIZE + 120,
+            x * this.TILE_SIZE + 10,
+            `${Math.floor(this.foregroundData[x][y].nitrogen)}`,
+            {
+              fontFamily: 'Arial',
+              fontSize: '12px',
+              color: 'blue',
             },
           )
         }
@@ -193,6 +217,26 @@ export class Mushrooms extends Phaser.Scene {
       }
     }
 
+    if (this.gameState === GameState.Feeding) {
+      const hoverX = this.hoveredTileX
+      const hoverY = this.hoveredTileY
+      if (!hoverX || !hoverY || !this.foregroundData[hoverY][hoverX]) return
+
+      this.children.each((child) => {
+        if (child.type === 'Graphics') child.destroy()
+      })
+
+      const tileXWorld = hoverX * this.TILE_SIZE
+      const tileYWorld = hoverY * this.TILE_SIZE
+      const graphics = this.add.graphics()
+      graphics.fillStyle(0xffffff, 0.1)
+      graphics.fillRect(tileXWorld, tileYWorld, this.TILE_SIZE, this.TILE_SIZE)
+
+      if (this.pointer.isDown) {
+        this.foregroundData[hoverY][hoverX].nitrogen = 100
+      }
+    }
+
     if (this.gameState === GameState.Idle) {
       const hoverX = this.hoveredTileX
       const hoverY = this.hoveredTileY
@@ -233,6 +277,7 @@ export class Mushrooms extends Phaser.Scene {
 
     if (this.wateringCan) this.wateringCan.destroy()
     if (this.trowel) this.trowel.destroy()
+    if (this.fertiliser) this.fertiliser.destroy()
     if (this.mushroomPreview) this.mushroomPreview.destroy()
     if (this.sporeToPlant) this.sporeToPlant = null
     if (this.infoboxCallback) this.infoboxCallback(null)
@@ -270,6 +315,16 @@ export class Mushrooms extends Phaser.Scene {
     // Setting the spore data and infobox callback for the communication
     this.sporeToPlant = spore
     this.infoboxCallback = callback
+  }
+
+  startFeeding() {
+    this.gameState = GameState.Feeding
+    this.startFocus()
+    if (!this.IS_DEBUG) this.input.setDefaultCursor('none')
+
+    this.fertiliser = this.add.image(-100, -100, 'fertiliser')
+    this.fertiliser.setScale(0.5)
+    this.fertiliser.depth = 3
   }
 
   startFocus() {

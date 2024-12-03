@@ -31,6 +31,7 @@ export class Preloader extends Scene {
     // User interface
     this.load.image('watering-can', 'sprite_watering_can.png')
     this.load.image('trowel', 'sprite_trowel.png')
+    this.load.image('fertiliser', 'sprite_fertiliser.png')
 
     // Mushrooms
     this.load.spritesheet('red-mushroom', 'frames_mushroom_red.png', {

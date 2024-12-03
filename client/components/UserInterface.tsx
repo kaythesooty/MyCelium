@@ -118,6 +118,7 @@ export default function UserInterface() {
           iconSrc={'/assets/icon_fertiliser.png'}
           iconPosition="right"
           onClick={() => {
+            scene?.startFeeding()
             setTooltip('Press Right Mouse Button to stop Fertilising')
           }}
         />
