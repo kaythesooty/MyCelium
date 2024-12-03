@@ -6,13 +6,16 @@ const marketData: SlotItem[] = [
   {
     index: 0,
     item: {
-      name: 'Lovers Redcap',
-      description: 'It do be a cap doe',
-      img: '/assets/item_red_mushroom.png',
-      type: 'Cap',
-      sellPrice: 10,
-      buyPrice: 200,
+      img: '/assets/item_sack.png',
+      name: "Spore Sack (Lover's Redcap)",
+      id: 'frames_mushroom_red',
+      description:
+        "Spores from the cute redcap you harvested, it's sad it had to end that way. Can be planted or sold",
+      type: 'spores',
+      sellPrice: 5,
+      buyPrice: 25,
     },
+    quantity: 20,
   },
 ]
 

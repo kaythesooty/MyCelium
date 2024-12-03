@@ -7,12 +7,26 @@ export default function CreateInventory(): SlotItem[] {
     {
       index: 0,
       item: {
-        name: 'Lovers Redcap',
-        description: 'It do be a cap doe',
-        img: '/assets/item_red_mushroom.png',
-        type: 'Cap',
+        name: "Lover's Redcap",
+        img: '/assets/item_redcap.png',
+        description: 'An adorable little redcap. It loves you.',
+        type: 'cap',
         sellPrice: 10,
         buyPrice: 200,
+      },
+      quantity: 5,
+    },
+    {
+      index: 1,
+      item: {
+        img: '/assets/item_sack_redcap.png',
+        name: "Spore Sack (Lover's Redcap)",
+        id: 'frames_mushroom_red',
+        description:
+          "Spores from the cute redcap you harvested, it's sad it had to end that way. Can be planted or sold",
+        type: 'spores',
+        sellPrice: 5,
+        buyPrice: 25,
       },
       quantity: 20,
     },

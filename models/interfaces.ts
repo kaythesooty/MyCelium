@@ -16,6 +16,7 @@ export interface MushroomInfobox {
 export interface Item {
   name: string
   description: string
+  id?: string
   img: string
   type: string
   sellPrice: number
