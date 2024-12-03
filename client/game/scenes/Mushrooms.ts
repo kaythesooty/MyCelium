@@ -124,7 +124,8 @@ export class Mushrooms extends Phaser.Scene {
 
   update(time: number, delta: number) {
     this.children.each((child) => {
-      if (child.type === 'Text') child.destroy() // Destroying debug text
+      if (child.name === 'debug') child.destroy()
+      // if (child.type === 'Text') child.destroy() // Destroying debug text
       if (child.type === 'Graphics') child.destroy()
     })
 
@@ -167,7 +168,7 @@ export class Mushrooms extends Phaser.Scene {
 
         // Debugging
         if (this.IS_DEBUG) {
-          this.add.text(
+          const debugMoistLevel = this.add.text(
             y * this.TILE_SIZE + 10,
             x * this.TILE_SIZE + 10,
             `${Math.floor(this.foregroundData[x][y].moist)}`,
@@ -177,8 +178,10 @@ export class Mushrooms extends Phaser.Scene {
               color: 'orange',
             },
           )
+          debugMoistLevel.depth = 5
+          debugMoistLevel.setName('debug')
 
-          this.add.text(
+          const debugGrowthFactor = this.add.text(
             y * this.TILE_SIZE + 120,
             x * this.TILE_SIZE + 10,
             `${Math.floor(this.foregroundData[x][y].nitrogen)}`,
@@ -188,6 +191,8 @@ export class Mushrooms extends Phaser.Scene {
               color: 'blue',
             },
           )
+          debugGrowthFactor.depth = 5
+          debugGrowthFactor.setName('debug')
         }
       }
     }

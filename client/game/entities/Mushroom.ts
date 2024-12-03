@@ -68,8 +68,7 @@ export class Mushroom extends GameObjects.Sprite {
   }
 
   debug() {
-    // Debugging
-    this.scene.add.text(
+    const debug = this.scene.add.text(
       this.x + 10,
       this.y + this.size - 20,
       `${Math.floor(this.growth)}`,
@@ -79,5 +78,7 @@ export class Mushroom extends GameObjects.Sprite {
         color: 'red',
       },
     )
+    debug.depth = 5
+    debug.setName('debug')
   }
 }
