@@ -8,7 +8,6 @@ import Fungipedia from '@components/Fungipedia'
 import Button from '@components/Buttons'
 import { PopupName } from '@enums'
 import { MushroomInfobox, Spore } from '@interfaces'
-import { use } from 'matter'
 
 // Remove later
 const tempSpore: Spore = {
@@ -24,6 +23,7 @@ export default function UserInterface() {
   const [tooltip, setTooltip] = useState<string | null>(null)
   const [sporeItem, setSporeItem] = useState<Spore | null>(tempSpore)
   const [infoData, setInfoData] = useState<MushroomInfobox | null>(null)
+  const [userMoney, setUserMoney] = useState<number>(0)
 
   useEffect(() => {
     EventBus.on('current-scene-ready', (scene: Mushrooms) => setScene(scene))
@@ -40,15 +40,18 @@ export default function UserInterface() {
       scene?.startFocus()
     }
 
+    const money = scene?.registry.get('money')
+    if (money) setUserMoney(money)
+
     return () => {
       EventBus.removeListener('current-scene-ready')
     }
-  }, [scene, popup, tooltip, infoData])
+  }, [scene, popup, tooltip, infoData, userMoney])
 
   return (
     <>
       <div
-        className={`bg-texture absolute top-36 flex h-12 w-44 items-center justify-start rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] font-game transition-all ${tooltip !== null ? ' -left-64' : 'left-8'}`}
+        className={`absolute top-36 flex h-12 w-44 items-center justify-start rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] bg-texture font-game transition-all ${tooltip !== null ? ' -left-64' : 'left-8'}`}
       >
         <img
           src="/assets/icon_cash.png"
@@ -58,7 +61,7 @@ export default function UserInterface() {
           className="pointer-events-none absolute z-10 size-20"
         />
         <span className="pointer-events-none ml-12 mr-6 w-full -translate-y-2 text-right text-[#522c13]">
-          $73
+          ${userMoney}
         </span>
       </div>
 
@@ -143,7 +146,7 @@ export default function UserInterface() {
 
       <div className={`absolute ${infoData && 'right-96'}`}>
         {popup === PopupName.Chest && <Chest />}
-        {popup === PopupName.Market && <Market />}
+        {popup === PopupName.Market && <Market sceneData={scene} />}
         {popup === PopupName.Fungipedia && <Fungipedia />}
         {infoData !== null && <Infobox infoData={infoData} />}
       </div>

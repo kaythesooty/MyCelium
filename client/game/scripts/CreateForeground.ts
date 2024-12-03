@@ -5,7 +5,6 @@ export default function CreateForeground(
   scene: Phaser.Scene,
 ) {
   const map = scene.make.tilemap({
-    key: 'dirt-map',
     width,
     height,
     tileWidth: tileSize,

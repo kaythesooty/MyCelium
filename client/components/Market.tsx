@@ -1,56 +1,15 @@
-import { useState } from 'react'
-import { Inventory, Item, ShopInventory } from '@models/inventory'
-
-const playerInventory: Inventory = [
-  {
-    item: {
-      name: 'Lovers Redcap',
-      img: '/assets/red_mushroom_item.png',
-      type: 'Cap',
-      value: 10,
-      description: 'It do be a cap doe',
-    },
-    quantity: 20,
-  },
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-]
+import { useState, useEffect } from 'react'
+import { Mushrooms } from '@game/scenes/Mushrooms'
+import { InventoryItem, ShopInventory } from '@interfaces'
 
 const initialShopInventory: ShopInventory = [
   {
     item: {
       name: 'Lovers Redcap',
-      img: '/assets/red_mushroom_item.png',
+      img: '/assets/item_red_mushroom.png',
       type: 'Cap',
-      value: 10,
       description: 'It do be a cap doe',
+      value: 200,
     },
   },
   null,
@@ -69,108 +28,127 @@ const initialShopInventory: ShopInventory = [
   null,
 ]
 
-export default function Market() {
-  const [inventory, setInventory] = useState(playerInventory)
-  const [shopInventory, setShopInventory] = useState(initialShopInventory)
+export default function Market({ sceneData }: { sceneData: Mushrooms | null }) {
+  const [scene, setScene] = useState<Mushrooms | null>(null)
+  const [money, setMoney] = useState<number>(0)
+  const [inventory, setInventory] = useState<InventoryItem[]>([])
+  const [shop, setShop] = useState(initialShopInventory)
+  const [slotIndex, setSlotIndex] = useState<number | null>(null)
+  const [shopSlotIndex, setShopSlotIndex] = useState<number | null>(null)
 
-  const [selectedInventorySlot, setSelectedInventorySlot] = useState<
-    number | null
-  >() // State to hold tile data
-  const [selectedShopSlot, setSelectedShopSlot] = useState<number | null>(null) // State to track the selected slot
+  useEffect(() => {
+    setScene(sceneData)
 
-  const handleInventorySlotClick = (slot: number) => {
-    setSelectedInventorySlot(slot) // Set the selected tile to display inventory data
-  }
-
-  const handleShopSlotClick = (slot: number) => {
-    setSelectedShopSlot(slot)
-  }
-
-  const handleSell = (selectedInventorySlot: number) => {
-    const newInventory: Inventory = inventory.map((slot, index) => {
-      if (slot === null || slot === undefined) return null
-      else if (index !== selectedInventorySlot) {
-        return slot
-      } else if (slot.quantity > 1) {
-        slot.quantity -= 1
-        return slot
-      } else {
-        return null
-      }
-    })
-    setInventory(newInventory)
-  }
-  const handleBuy = (selectedItem: Item) => {
-    const newInventory = [...inventory]
-    const emptySlot = newInventory.findIndex((slot) => slot === null)
-    if (newInventory.some((item) => item?.item.name === selectedItem.name)) {
-      console.log('Hello!')
-      const itemSlotIndex = newInventory.findIndex(
-        (item) => selectedItem.name === item?.item.name,
-      )
-      newInventory[itemSlotIndex]!.quantity += 1
-    } else if (emptySlot !== -1) {
-      newInventory[emptySlot] = {
-        item: selectedItem,
-        quantity: 1,
-      }
+    const inventoryData = scene?.registry.get('inventory')
+    if (inventoryData) {
+      const length = inventoryData.length
+      for (let i = 0; i < 30 - length; i++) inventoryData.push(null)
+      setInventory(inventoryData)
     }
-    setInventory(newInventory)
+
+    const money = scene?.registry.get('money')
+    if (money) setMoney(money)
+  }, [sceneData, scene])
+
+  const handleSell = () => {
+    if (slotIndex === null || inventory[slotIndex] === null) return
+
+    // Removing quantity of the item by one
+    inventory[slotIndex].quantity--
+    // Setting new money value globally
+    setMoney(money + inventory[slotIndex].item.value)
+    scene?.events.emit('registry:add-money', inventory[slotIndex].item.value)
+    // And now if quantity is 0 - removing it from the array and updating it
+    if (inventory[slotIndex].quantity === 0) inventory[slotIndex] = null
+    setInventory([...inventory])
   }
+
+  const handleBuy = () => {
+    if (
+      shopSlotIndex === null ||
+      shop[shopSlotIndex] === null ||
+      shop[shopSlotIndex].item.value > money
+    ) {
+      return
+    }
+
+    const shopItem = shop[shopSlotIndex]
+    const emptySlotIndex = inventory.findIndex((slot) => slot === null)
+    const existingSlotIndex = inventory.findIndex(
+      (slot) => slot?.item.name === shopItem.item.name,
+    )
+    console.log(existingSlotIndex)
+    console.log(inventory[existingSlotIndex])
+    if (existingSlotIndex >= 0 && inventory[existingSlotIndex] !== null) {
+      console.log('Adding to existent')
+      inventory[existingSlotIndex].quantity++
+    } else if (inventory[emptySlotIndex]) {
+      console.log('Adding new')
+      inventory[emptySlotIndex].quantity = 1
+    }
+    setInventory([...inventory])
+    setMoney(money - shop[shopSlotIndex].item.value)
+    scene?.events.emit(
+      'registry:subtract-money',
+      shop[shopSlotIndex].item.value,
+    )
+  }
+
   return (
     <div className="flex h-[800px] w-[1300px] flex-col rounded-2xl bg-white bg-contain p-6 pl-14">
       <div className="flex justify-evenly pb-6">
         <button
           className="border-grey-300 rounded border p-1 shadow"
-          onClick={() => {
-            {
-              typeof selectedInventorySlot === 'number' &&
-                handleSell(selectedInventorySlot)
-            }
-          }}
+          onClick={handleSell}
         >
           Sell
         </button>
-        <div>Cash: 73</div>
+
+        <div>Cash: ${money}</div>
+
         <button
           className="border-grey-300 rounded border p-1 shadow"
-          onClick={() => {
-            {
-              typeof selectedShopSlot === 'number' &&
-                shopInventory[selectedShopSlot] !== null &&
-                handleBuy(shopInventory[selectedShopSlot].item)
-            }
-          }}
+          onClick={handleBuy}
         >
           Buy
         </button>
       </div>
+
       <div className="flex flex-row">
         <div className="w-500 mr-14 flex flex-wrap gap-3 rounded-2xl">
-          {inventory.map((item, index) => (
-            <button
-              key={index}
-              className="flex h-28 w-28 flex-row flex-wrap items-start justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
-              onClick={() => handleInventorySlotClick(index)}
-            >
-              <img src={item?.item.img} alt="" className="h-24 translate-x-2" />
-              <div className="bg-yellow-500">{item?.quantity}</div>
-              {item?.item && (
-                <div className="rounded-lg bg-green-500 pl-2 pr-2">
-                  {item.item.value}
-                </div>
-              )}
-            </button>
-          ))}
+          {inventory &&
+            inventory.map((item, index) => (
+              <button
+                key={index}
+                className="flex h-28 w-28 flex-row flex-wrap items-start justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
+                onClick={() => setSlotIndex(index)}
+              >
+                <img
+                  src={item?.item.img}
+                  alt=""
+                  className="h-24 translate-x-2"
+                />
+                <div className="bg-yellow-500">{item?.quantity}</div>
+                {item?.item && (
+                  <div className="rounded-lg bg-green-500 pl-2 pr-2">
+                    {item.item.value}
+                  </div>
+                )}
+              </button>
+            ))}
         </div>
         <div className="w-400 flex flex-wrap gap-3 rounded-2xl">
-          {shopInventory.map((item, index) => (
+          {shop.map((item, index) => (
             <button
               key={index}
               className="flex h-28 w-28 items-center justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
-              onClick={() => handleShopSlotClick(index)}
+              onClick={() => setShopSlotIndex(index)}
             >
-              <img src={item?.item.img} alt="" className="h-24 translate-x-2" />
+              <img
+                src={item?.item.img}
+                alt=""
+                className="size-24 translate-x-2"
+              />
               {item?.item && (
                 <div className="rounded-lg bg-green-500 pl-2 pr-2">
                   {item.item.value}

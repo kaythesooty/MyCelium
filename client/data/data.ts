@@ -26,10 +26,10 @@ const data = [
     content: {
       title: 'Tutorial',
       description:
-        "Welcome to MyCelium! Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
+        "Welcome to MyCelium! 1. Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
       specifics:
-        'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
-      care: 'This is a tutorial of how the game works, first water the soil to sprout a spore, watch it grow into a mushroom. Sell your goods at the market to purchase rare and unique mushrooms.',
+       '',
+      care: '',
     },
   },
 
@@ -110,7 +110,7 @@ const data = [
       name: 'Silly-kitty bolete',
       family: 'Ferruktus felis',
       properties: 'Edible, tasty',
-      poisonous: 'POISONOUS',
+      poisonous: 'poisonous',
       location:
         'Found in damp woods, hidden amongst the vegetation of the forest floor',
       description:

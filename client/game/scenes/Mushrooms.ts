@@ -2,10 +2,11 @@ import { Dispatch } from 'react'
 import { EventBus } from '../EventBus'
 import matrix from '@utils/matrix'
 import clamp from '@utils/clamp'
-import { MushroomInfobox, Spore } from '@interfaces'
+import { MushroomInfobox, Spore, InventoryItem } from '@interfaces'
 import CreateBackground from '@game/scripts/CreateBackground'
 import CreateForeground from '@game/scripts/CreateForeground'
 import CreateMainCamera from '@game/scripts/CreateMainCamera'
+import CreateInventory from '@game/scripts/CreateInventory'
 import { Mushroom } from '@game/entities/Mushroom'
 
 interface GameTile {
@@ -41,6 +42,8 @@ export class Mushrooms extends Phaser.Scene {
 
   gameState: GameState = GameState.Idle
   foregroundData!: GameTile[][]
+  inventoryData!: InventoryItem[]
+  moneyData: number = 73
 
   wateringCan!: Phaser.GameObjects.Image
   trowel!: Phaser.GameObjects.Image
@@ -75,6 +78,27 @@ export class Mushrooms extends Phaser.Scene {
       this.TILE_SIZE,
       this,
     )
+
+    this.inventoryData = CreateInventory()
+    this.registry.set({
+      money: this.moneyData,
+      inventory: this.inventoryData,
+    })
+
+    this.events.on('registry:add-inventory', (value: InventoryItem[]) => {
+      const currentInventory = this.registry.get('inventory')
+      this.registry.set('inventory', currentInventory.push(value))
+    })
+
+    this.events.on('registry:add-money', (value: number) => {
+      const currentMoney = this.registry.get('money')
+      this.registry.set('money', currentMoney + value)
+    })
+
+    this.events.on('registry:subtract-money', (value: number) => {
+      const currentMoney = this.registry.get('money')
+      this.registry.set('money', currentMoney - value)
+    })
 
     this.foregroundData = matrix(this.WORLD_WIDTH, this.WORLD_HEIGHT)
     this.foregroundData[2][4] = { moist: 0, nitrogen: 0, mushroom: null }
@@ -330,4 +354,18 @@ export class Mushrooms extends Phaser.Scene {
   startFocus() {
     this.camera.zoomTo(2.2, 100)
   }
+
+  //   saveGame() {
+  //     const file = {
+  //        gameState: this.gameState
+  //     }
+  //     localStorage.setItem('saveFile',JSON.stringify(file));
+  // }
+
+  // loadGame() {
+  //     const file = localStorage.getItem('saveFile')
+  //     if (!file) return
+  //     JSON.parse(file);
+  //    this.gameState = file.gameState
+  // };
 }

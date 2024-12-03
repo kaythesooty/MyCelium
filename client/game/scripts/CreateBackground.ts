@@ -7,7 +7,6 @@ export default function CreateBackground(
   scene: Phaser.Scene,
 ) {
   const map = scene.make.tilemap({
-    key: 'background-map',
     width,
     height,
     tileWidth: tileSize,
