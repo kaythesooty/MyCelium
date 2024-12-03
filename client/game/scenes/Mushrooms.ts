@@ -2,19 +2,13 @@ import { Dispatch } from 'react'
 import { EventBus } from '../EventBus'
 import matrix from '@utils/matrix'
 import clamp from '@utils/clamp'
-import { MushroomInfobox, Spore, SlotItem } from '@interfaces'
+import { MushroomInfobox, Spore, SlotItem, GameTile } from '@interfaces'
 import CreateBackground from '@game/scripts/CreateBackground'
 import CreateForeground from '@game/scripts/CreateForeground'
 import CreateMainCamera from '@game/scripts/CreateMainCamera'
 import CreateInventory from '@game/scripts/CreateInventory'
 import { Mushroom } from '@game/entities/Mushroom'
 import { wateringCan, shovelOne } from '../../audio/audioEngine'
-
-interface GameTile {
-  moist: number
-  nitrogen: number
-  mushroom?: Mushroom | null
-}
 
 enum GameState {
   Idle,
@@ -25,14 +19,14 @@ enum GameState {
 
 export class Mushrooms extends Phaser.Scene {
   IS_DEBUG = true // You know what to do >:-)
-  T_SCALE = 1 // Controls the time scale of the game for debugging purposes
+  T_SCALE = 5 // Controls the time scale of the game for debugging purposes
 
   TILE_SIZE = 150
   WORLD_WIDTH = 10
   WORLD_HEIGHT = 6
 
-  GROWTHSPEED = 10 // how long in seconds it takes a mushroom to grow one step
-  DRYSPEED = 10 // how long in seconds it takes a dirt tile to dry one step
+  GROWTHSPEED = 60 // how long in seconds it takes a mushroom to grow one step
+  DRYSPEED = 60 // how long in seconds it takes a dirt tile to dry one step
 
   camera!: Phaser.Cameras.Scene2D.Camera
   pointer!: Phaser.Input.Pointer
@@ -59,7 +53,8 @@ export class Mushrooms extends Phaser.Scene {
   }
 
   create() {
-    this.camera = CreateMainCamera(
+      
+      this.camera = CreateMainCamera(
       this.WORLD_WIDTH,
       this.WORLD_HEIGHT,
       this.TILE_SIZE,
@@ -140,7 +135,7 @@ export class Mushrooms extends Phaser.Scene {
         this.foregroundData[x][y].moist -= newMoist
         if (moistStage <= 0) this.foregroundData[x][y].moist = 0
 
-        const newFood = delta / (300 / this.T_SCALE)
+        const newFood = delta / (30 * this.DRYSPEED / this.T_SCALE)
         this.foregroundData[x][y].nitrogen -= newFood
         if (this.foregroundData[x][y].nitrogen <= 0)
           this.foregroundData[x][y].nitrogen = 0
@@ -150,14 +145,28 @@ export class Mushrooms extends Phaser.Scene {
           const tile = this.foregroundData[x][y]
           // In here should be the multiplier logic for the growth speed
           let multiplier = 1
-          if (Math.floor(tile.moist / 100) === mushroom.thirst) multiplier = 0.5
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1)
+          if (Math.floor(tile.moist / 100) === mushroom.thirst) {
+            multiplier = 0.5
+            mushroom.watered = 2
+          }
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1) {
             multiplier = 0.8
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1)
+            mushroom.watered = 1
+          }
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1) {
             multiplier = 0.8
-          else if (Math.floor(tile.moist / 100) != mushroom.thirst)
+            mushroom.watered = 1
+          }
+          else if (Math.floor(tile.moist / 100) != mushroom.thirst) {
             multiplier = 100
-          if (tile.nitrogen == 0) multiplier = 100
+            mushroom.watered = 0
+          }
+          if (tile.nitrogen >= 30) mushroom.fed = 2
+          else if (tile.nitrogen < 30) mushroom.fed = 1
+          if (tile.nitrogen == 0) {
+            multiplier = 100
+            mushroom.fed = 0
+          }
 
           mushroom.grow(
             delta / ((10 * this.GROWTHSPEED * multiplier) / this.T_SCALE),
@@ -302,6 +311,45 @@ export class Mushrooms extends Phaser.Scene {
         this.infoboxCallback(
           this.foregroundData[hoverY][hoverX].mushroom?.getInfo(),
         )
+      }
+
+      if (this.input.mousePointer.isDown && this.pointer.rightButtonDown()) {
+        const shroom = this.foregroundData[hoverY][hoverX].mushroom
+
+        if (shroom.grown) {
+          this.harvest(this.foregroundData[hoverY][hoverX])
+        }
+      }
+    }
+  }
+
+  harvest(tile: GameTile) {
+    if (tile.mushroom === null || tile.mushroom === undefined) return
+
+    tile.mushroom.mushroom.destroy()
+    tile.mushroom = null
+
+    const inv = this.registry.get("inventory") as SlotItem[]
+    console.log("on harvest: ", inv)
+    let item = inv.findIndex((itm) => itm.item.name === "Lovers Redcap")
+    console.log(item)
+
+    if (item != -1) {
+      inv[item].quantity++
+    } else {
+      item = inv.findIndex(itm => itm == null)
+      if (item == -1) item = 0
+      inv[item] = {
+        index: 0,
+        item: {
+          name: 'Lovers Redcap',
+          description: 'It do be a cap doe',
+          img: '/assets/item_red_mushroom.png',
+          type: 'Cap',
+          sellPrice: 10,
+          buyPrice: 200,
+        },
+        quantity: 1,
       }
     }
   }

@@ -1,3 +1,5 @@
+import { Mushroom } from "@game/entities/Mushroom"
+
 export interface Spore {
   name: string
   texture: string
@@ -27,4 +29,10 @@ export interface SlotItem {
   index: number
   item: Item
   quantity?: number
+}
+
+export interface GameTile {
+  moist: number
+  nitrogen: number
+  mushroom?: Mushroom | null
 }

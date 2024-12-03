@@ -150,6 +150,15 @@ export default function UserInterface() {
             setTooltip('Press Right Mouse Button to stop Planting')
           }}
         />
+
+        <Button
+          text="Inventory Log"
+          iconSrc={'/assets/icon_trowel.png'}
+          iconPosition="right"
+          onClick={() => {
+            console.log(scene?.registry.get("inventory"))
+          }}
+        />
       </div>
 
       {tooltip && (

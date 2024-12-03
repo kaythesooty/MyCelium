@@ -13,6 +13,8 @@ export class Mushroom extends GameObjects.Sprite {
   grown = false
   thirst = 2
   hunger = 0
+  watered = 0
+  fed = 0
 
   constructor(scene: Scene, x: number, y: number, size: number, spore: Spore) {
     super(scene, x * size, y * size, spore.texture, 0)
