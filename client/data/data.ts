@@ -5,13 +5,8 @@ const data = [
       title: 'Welcome to Fungipedia',
       description: '',
       img: '/assets/sprite_fungipedia.png',
-    },
-  },
-  {
-    type: 'index',
-    content: {
-      title: 'Index',
-      mushrooms: [
+      header: 'Index',
+        mushrooms: [
         { name: "Lover's redcap" },
         { name: 'Hollow Snakehead' },
         { name: "Fool's Bolete" },
@@ -26,10 +21,17 @@ const data = [
     content: {
       title: 'Tutorial',
       description:
+<<<<<<< HEAD
+        "Welcome to My Celium! Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
+      play: 'To start play, you click on the fertiliser button to plant your first spore.',
+      care: 'To care for the spore you have to watch for signs in the soil and growth, one of the biggest challenges is draught, as the soil gets lighter the mushroom growth will slow. They like moisture and fertisation to click their spirits high, experiment with how much to feed/water.',
+      growth: 'The growth stage should look something like this below, if it gets to fully grown. Try your luck in selling at the local Market, level up to buy rare spores.'
+=======
         "Welcome to MyCelium! 1. Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
       specifics:
        '',
       care: '',
+>>>>>>> dev
     },
   },
 
@@ -54,7 +56,7 @@ const data = [
       name: 'Hollow Snakehead',
       family: '(Cavae anguis caput morchella)',
       properties: 'edible, tasty',
-      toxicity: 'poisonous',
+      toxicity: 'POISONOUS',
       location:
         'Often spotted under the shade of tree canopies , utilising decaying wood to sustain itself',
       description:
@@ -68,7 +70,7 @@ const data = [
       name: "Fool's Bolete",
       family: '(boletus stultus)',
       properties: 'magic, deadly',
-      toxicity: 'poisonous',
+      toxicity: 'POISONOUS',
       location:
         'Found amongst long dead carcasses of any variety,subsisting off of the dry bones',
       description:
@@ -96,7 +98,7 @@ const data = [
       name: 'Cumulo Puffball',
       family: '(cumulo vento-pila)',
       properties: 'edible, tasty',
-      toxicity: 'poisonous',
+      toxicity: 'POISONOUS',
       location:
         'Thriving within warmer climates,this particular puffball prefers to bask in the sun surrounded by decomposing vegetation',
       description:
@@ -110,7 +112,11 @@ const data = [
       name: 'Silly-kitty bolete',
       family: 'Ferruktus felis',
       properties: 'Edible, tasty',
+<<<<<<< HEAD
+      toxicity: 'POISONOUS',
+=======
       poisonous: 'poisonous',
+>>>>>>> dev
       location:
         'Found in damp woods, hidden amongst the vegetation of the forest floor',
       description:
