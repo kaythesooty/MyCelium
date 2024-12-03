@@ -1,4 +1,4 @@
-import { Spore } from '@models/interfaces'
+import { Spore } from '@interfaces'
 import clamp from '@utils/clamp'
 import { GameObjects, Scene } from 'phaser'
 
@@ -49,11 +49,13 @@ export class Mushroom extends GameObjects.Sprite {
 
   getInfo() {
     const x =
-      ((this.mushroom.x - this.scene.cameras.main.worldView.x) *
-      this.scene.cameras.main.zoom) + 150
+      (this.mushroom.x - this.scene.cameras.main.worldView.x) *
+        this.scene.cameras.main.zoom +
+      150
     const y =
       (this.mushroom.y - this.scene.cameras.main.worldView.y) *
-      this.scene.cameras.main.zoom - 100
+        this.scene.cameras.main.zoom -
+      100
 
     return {
       name: this.info.name,

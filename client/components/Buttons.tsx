@@ -1,10 +1,10 @@
-import React from 'react'
+import { MouseEvent } from 'react'
 
 interface Props {
   text: string
   iconSrc: string
   iconPosition: 'left' | 'right'
-  onClick: (event: React.MouseEvent) => void
+  onClick: (event: MouseEvent) => void
 }
 
 export default function Button({

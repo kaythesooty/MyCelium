@@ -8,6 +8,7 @@ import Fungipedia from '@components/Fungipedia'
 import Button from '@components/Buttons'
 import { PopupName } from '@enums'
 import { MushroomInfobox, Spore } from '@interfaces'
+import { buttonClickOne, buttonClickTwo } from '../audio/audioEngine.ts'
 
 // Remove later
 const tempSpore: Spore = {
@@ -21,18 +22,21 @@ export default function UserInterface() {
   const [scene, setScene] = useState<Mushrooms | null>(null)
   const [popup, setPopup] = useState<PopupName | null>(null)
   const [tooltip, setTooltip] = useState<string | null>(null)
-  const [sporeItem, setSporeItem] = useState<Spore | null>(tempSpore)
+  const [sporeItem] = useState<Spore | null>(tempSpore)
   const [infoData, setInfoData] = useState<MushroomInfobox | null>(null)
   const [userMoney, setUserMoney] = useState<number>(0)
 
   useEffect(() => {
-    EventBus.on('current-scene-ready', (scene: Mushrooms) => setScene(scene))
-    document.addEventListener('contextmenu', (event) => {
+    const handleContext = (event: MouseEvent) => {
       event.preventDefault()
+      if (popup || tooltip) handleBackAudio() // Playing the back audio
       if (popup !== null) setPopup(null)
       if (tooltip !== null) setTooltip(null)
       scene?.stopEverything()
-    })
+    }
+
+    EventBus.on('current-scene-ready', (scene: Mushrooms) => setScene(scene))
+    document.addEventListener('contextmenu', handleContext)
 
     if (infoData) {
       setPopup(PopupName.Infobox)
@@ -45,8 +49,12 @@ export default function UserInterface() {
 
     return () => {
       EventBus.removeListener('current-scene-ready')
+      document.removeEventListener('contextmenu', handleContext)
     }
   }, [scene, popup, tooltip, infoData, userMoney])
+
+  const handleButtonAudio = () => buttonClickOne.play()
+  const handleBackAudio = () => buttonClickTwo.play()
 
   return (
     <>
@@ -76,6 +84,7 @@ export default function UserInterface() {
           iconPosition="left"
           onClick={() => {
             setPopup(PopupName.Chest)
+            handleButtonAudio()
             setTooltip('Press Right Mouse Button to close Chest')
           }}
         />
@@ -86,6 +95,7 @@ export default function UserInterface() {
           iconPosition="left"
           onClick={() => {
             setPopup(PopupName.Market)
+            handleButtonAudio()
             setTooltip('Press Right Mouse Button to close Market')
           }}
         />
@@ -96,6 +106,7 @@ export default function UserInterface() {
           iconPosition="left"
           onClick={() => {
             setPopup(PopupName.Fungipedia)
+            handleButtonAudio()
             setTooltip('Press Right Mouse Button to close Fungipedia')
           }}
         />
@@ -112,6 +123,7 @@ export default function UserInterface() {
           iconPosition="right"
           onClick={() => {
             scene?.startWatering()
+            handleButtonAudio()
             setTooltip('Press Right Mouse Button to stop Watering')
           }}
         />
@@ -121,6 +133,7 @@ export default function UserInterface() {
           iconSrc={'/assets/icon_fertiliser.png'}
           iconPosition="right"
           onClick={() => {
+            handleButtonAudio()
             scene?.startFeeding()
             setTooltip('Press Right Mouse Button to stop Fertilising')
           }}
@@ -133,6 +146,7 @@ export default function UserInterface() {
           onClick={() => {
             if (!sporeItem) return // Need to figure out the logic for this
             scene?.startPlanting(sporeItem, setInfoData)
+            handleButtonAudio()
             setTooltip('Press Right Mouse Button to stop Planting')
           }}
         />
@@ -145,8 +159,8 @@ export default function UserInterface() {
       )}
 
       <div className={`absolute ${infoData && 'right-96'}`}>
-        {popup === PopupName.Chest && <Chest sceneData={scene} />}
-        {popup === PopupName.Market && <Market sceneData={scene} />}
+        {popup === PopupName.Chest && <Chest scene={scene} />}
+        {popup === PopupName.Market && <Market scene={scene} />}
         {popup === PopupName.Fungipedia && <Fungipedia />}
         {infoData !== null && <Infobox infoData={infoData} />}
       </div>

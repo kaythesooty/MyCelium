@@ -1,160 +1,206 @@
 import { useState, useEffect } from 'react'
 import { Mushrooms } from '@game/scenes/Mushrooms'
-import { InventoryItem, ShopInventory } from '@interfaces'
+import { SlotItem } from '@interfaces'
 
-const initialShopInventory: ShopInventory = [
+const marketData: SlotItem[] = [
   {
+    index: 0,
     item: {
       name: 'Lovers Redcap',
+      description: 'It do be a cap doe',
       img: '/assets/item_red_mushroom.png',
       type: 'Cap',
-      description: 'It do be a cap doe',
-      value: 200,
+      sellPrice: 10,
+      buyPrice: 200,
     },
   },
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
 ]
 
-export default function Market({ sceneData }: { sceneData: Mushrooms | null }) {
-  const [scene, setScene] = useState<Mushrooms | null>(null)
+export default function Market({ scene }: { scene: Mushrooms | null }) {
+  const [chest, setChest] = useState<SlotItem[] | []>([])
   const [money, setMoney] = useState<number>(0)
-  const [inventory, setInventory] = useState<InventoryItem[]>([])
-  const [shop, setShop] = useState(initialShopInventory)
-  const [slotIndex, setSlotIndex] = useState<number | null>(null)
-  const [shopSlotIndex, setShopSlotIndex] = useState<number | null>(null)
+  const [chestSlot, setChestSlot] = useState<number | null>(null)
+  const [marketSlot, setMarketSlot] = useState<number | null>(null)
+  const market: SlotItem[] = marketData
 
   useEffect(() => {
-    setScene(sceneData)
-
-    const inventoryData = scene?.registry.get('inventory')
-    if (inventoryData) {
-      const length = inventoryData.length
-      for (let i = 0; i < 30 - length; i++) inventoryData.push(null)
-      setInventory(inventoryData)
-    }
-
-    const money = scene?.registry.get('money')
-    if (money) setMoney(money)
-  }, [sceneData, scene])
+    const chestData: SlotItem[] = scene?.registry.get('inventory')
+    const moneyData: number = scene?.registry.get('money')
+    if (chestData) setChest(chestData)
+    if (moneyData) setMoney(moneyData)
+  }, [scene?.registry])
 
   const handleSell = () => {
-    if (slotIndex === null || inventory[slotIndex] === null) return
+    if (chestSlot === null) return
 
-    // Removing quantity of the item by one
-    inventory[slotIndex].quantity--
-    // Setting new money value globally
-    setMoney(money + inventory[slotIndex].item.value)
-    scene?.events.emit('registry:add-money', inventory[slotIndex].item.value)
-    // And now if quantity is 0 - removing it from the array and updating it
-    if (inventory[slotIndex].quantity === 0) inventory[slotIndex] = null
-    setInventory([...inventory])
+    const chestItemIndex = chest.findIndex((slot) => slot?.index === chestSlot)
+    // Removing quantity of the item by one if item exists
+    if (chestItemIndex === -1) return
+    // Typescript wants us to make sure that quantity key is indeed there
+    else if (chest[chestItemIndex]?.quantity) chest[chestItemIndex].quantity--
+    setMoney(money + chest[chestSlot].item.sellPrice)
+    scene?.events.emit(
+      'registry:update-money',
+      money + chest[chestSlot].item.sellPrice,
+    )
+    // Now if quantity is 0 - removing it from the array, and updating state
+    if (chest[chestItemIndex].quantity === 0) {
+      chest.splice(chestItemIndex, 1)
+      setChestSlot(null)
+    }
+    setChest([...chest])
+    scene?.events.emit('registry:update-inventory', chest)
   }
 
   const handleBuy = () => {
-    if (
-      shopSlotIndex === null ||
-      shop[shopSlotIndex] === null ||
-      shop[shopSlotIndex].item.value > money
-    ) {
-      return
+    if (marketSlot === null || market[marketSlot].item.buyPrice > money) return
+
+    let fisrtEmptySlotIndex = 0
+    for (let index = 0; index < 30; index++) {
+      const exists = chest.find((slot) => slot?.index === index)
+      if (exists) continue
+      fisrtEmptySlotIndex = index
+      break
     }
 
-    const shopItem = shop[shopSlotIndex]
-    const emptySlotIndex = inventory.findIndex((slot) => slot === null)
-    const existingSlotIndex = inventory.findIndex(
-      (slot) => slot?.item.name === shopItem.item.name,
+    const existingSlotIndex = chest.findIndex(
+      (slot) => slot?.item.name === market[marketSlot].item.name,
     )
-    if (existingSlotIndex >= 0 && inventory[existingSlotIndex] !== null) {
-      inventory[existingSlotIndex].quantity++
-    } else if (inventory[emptySlotIndex]) {
-      inventory[emptySlotIndex].item = shopItem.item
-      inventory[emptySlotIndex].quantity = 1
+
+    if (existingSlotIndex >= 0 && chest[existingSlotIndex].quantity) {
+      chest[existingSlotIndex].quantity++
+    } else {
+      console.log(existingSlotIndex)
+      const newItem = {
+        index: fisrtEmptySlotIndex,
+        item: market[marketSlot].item,
+        quantity: 1,
+      }
+      setChest([...chest, newItem])
     }
-    setInventory([...inventory])
-    setMoney(money - shop[shopSlotIndex].item.value)
+    scene?.events.emit('registry:update-inventory', chest)
+    setMoney(money - market[marketSlot].item.buyPrice)
     scene?.events.emit(
-      'registry:subtract-money',
-      shop[shopSlotIndex].item.value,
+      'registry:update-money',
+      money - market[marketSlot].item.buyPrice,
     )
   }
 
   return (
-    <div className="flex h-[800px] w-[1300px] flex-col rounded-2xl bg-white bg-contain p-6 pl-14">
-      <div className="flex justify-evenly pb-6">
+    <div className="flex flex-col bg-white p-6">
+      <div className="flex gap-8 pb-6">
         <button
-          className="border-grey-300 rounded border p-1 shadow"
+          disabled={chestSlot === null}
           onClick={handleSell}
+          type="button"
+          className={
+            'flex h-12 w-36 items-center rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] bg-texture font-game transition-all hover:scale-110' +
+            (chestSlot !== null ? '' : ' opacity-60')
+          }
         >
-          Sell
+          <span className="pointer-events-none w-full -translate-y-2 text-center text-[#522c13]">
+            Sell
+          </span>
         </button>
-
-        <div>Cash: ${money}</div>
 
         <button
-          className="border-grey-300 rounded border p-1 shadow"
+          disabled={marketSlot === null}
           onClick={handleBuy}
+          type="button"
+          className={
+            'flex h-12 w-36 items-center rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] bg-texture font-game transition-all hover:scale-110' +
+            (marketSlot !== null ? '' : ' opacity-60')
+          }
         >
-          Buy
+          <span className="pointer-events-none w-full -translate-y-2 text-center text-[#522c13]">
+            Buy
+          </span>
         </button>
+
+        <div className="ml-auto flex h-12 w-44 items-center justify-start rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] bg-texture font-game transition-all">
+          <img
+            src="/assets/icon_cash.png"
+            alt=""
+            width={96}
+            height={96}
+            className="pointer-events-none absolute z-10 size-20"
+          />
+          <span className="pointer-events-none ml-12 mr-6 w-full -translate-y-2 text-right text-[#522c13]">
+            ${money}
+          </span>
+        </div>
       </div>
 
-      <div className="flex flex-row">
-        <div className="w-500 mr-14 flex flex-wrap gap-3 rounded-2xl">
-          {inventory &&
-            inventory.map((item, index) => (
+      <div className="flex gap-24">
+        <div className="grid grid-cols-6 gap-3">
+          {new Array(30).fill(null).map((slot, index) => {
+            const chestItemIndex = chest.findIndex(
+              (chestItem) => chestItem?.index === index,
+            )
+
+            return (
               <button
                 key={index}
-                className="flex h-28 w-28 flex-row flex-wrap items-start justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
-                onClick={() => setSlotIndex(index)}
+                disabled={chestItemIndex === -1}
+                className={`relative flex size-28 items-center justify-center font-game hover:bg-orange-400 ${chestSlot === index ? 'bg-orange-400 outline outline-2 outline-offset-2 outline-orange-400' : 'bg-orange-300'}`}
+                onClick={() => {
+                  setMarketSlot(null)
+                  setChestSlot(index)
+                }}
               >
-                <img
-                  src={item?.item.img}
-                  alt=""
-                  className="h-24 translate-x-2"
-                />
-                <div className="bg-yellow-500">{item?.quantity}</div>
-                {item?.item && (
-                  <div className="rounded-lg bg-green-500 pl-2 pr-2">
-                    {item.item.value}
-                  </div>
+                {chestItemIndex >= 0 && (
+                  <>
+                    <img
+                      src={chest[index].item.img}
+                      alt=""
+                      className="size-24"
+                    />
+                    <div className="absolute bottom-3 right-1 z-10 text-sm">
+                      x{chest[index].quantity}
+                    </div>
+                    <div className="absolute bottom-3 left-1 z-10">
+                      ${chest[index].item.sellPrice}
+                    </div>
+                  </>
                 )}
               </button>
-            ))}
+            )
+          })}
         </div>
-        <div className="w-400 flex flex-wrap gap-3 rounded-2xl">
-          {shop.map((item, index) => (
-            <button
-              key={index}
-              className="flex h-28 w-28 items-center justify-center rounded border border-gray-300 bg-white shadow transition hover:bg-gray-100 focus:border-red-700"
-              onClick={() => setShopSlotIndex(index)}
-            >
-              {item !== null && (
-                <img
-                  src={item?.item.img}
-                  alt=""
-                  className="size-24 translate-x-2"
-                />
-              )}
-              {item?.item && (
-                <div className="rounded-lg bg-green-500 pl-2 pr-2">
-                  {item.item.value}
-                </div>
-              )}
-            </button>
-          ))}
+        <div className="grid grid-cols-3 gap-3">
+          {new Array(15).fill(null).map((slot, index) => {
+            const marketItemIndex = market.findIndex(
+              (marketItem) => marketItem?.index === index,
+            )
+
+            return (
+              <button
+                key={index}
+                disabled={marketItemIndex === -1}
+                className={`relative flex size-28 items-center justify-center font-game hover:bg-blue-400 ${marketSlot === index ? 'bg-blue-400 outline outline-2 outline-offset-2 outline-blue-400' : 'bg-blue-300'}`}
+                onClick={() => {
+                  setChestSlot(null)
+                  setMarketSlot(index)
+                }}
+              >
+                {marketItemIndex >= 0 && (
+                  <>
+                    <img
+                      src={market[index].item.img}
+                      alt=""
+                      className="size-24"
+                    />
+                    <div className="absolute bottom-3 right-1 z-10 text-sm">
+                      x{market[index].quantity}
+                    </div>
+                    <div className="absolute bottom-3 left-1 z-10">
+                      ${market[index].item.buyPrice}
+                    </div>
+                  </>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

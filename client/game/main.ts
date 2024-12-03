@@ -1,6 +1,6 @@
 import { AUTO, Game, Scale } from 'phaser'
-import { Preloader } from './scenes/Preloader'
-import { Mushrooms } from './scenes/Mushrooms'
+import { Preloader } from '@game/scenes/Preloader'
+import { Mushrooms } from '@game/scenes/Mushrooms'
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -15,13 +15,6 @@ const config: Phaser.Types.Core.GameConfig = {
     height: viewportHeight,
     mode: Scale.ENVELOP,
     autoCenter: Scale.CENTER_BOTH,
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { x: 0, y: 300 },
-      debug: false,
-    },
   },
   backgroundColor: '#028af8',
   scene: [Preloader, Mushrooms],

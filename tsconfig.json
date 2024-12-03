@@ -15,16 +15,13 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@assets/*": ["client/assets/*"],
+      "@audio/*": ["client/audio/*"],
       "@components/*": ["client/components/*"],
-      "@context/*": ["client/context/*"],
       "@data/*": ["client/data/*"],
       "@game/*": ["client/game/*"],
-      "@hooks/*": ["client/hooks/*"],
       "@pages/*": ["client/pages/*"],
       "@styles/*": ["client/styles/*"],
       "@utils/*": ["client/utils/*"],
-      "@models/*": ["models/*"],
       "@enums": ["models/enums.ts"],
       "@interfaces": ["models/interfaces.ts"],
     }

@@ -13,23 +13,17 @@ export interface MushroomInfobox {
   position: { x: number; y: number }
 }
 
-export type Item = {
+export interface Item {
   name: string
+  description: string
   img: string
   type: string
-  value: number
-  description: string
+  sellPrice: number
+  buyPrice: number
 }
 
-export type InventoryItem = {
+export interface SlotItem {
+  index: number
   item: Item
-  quantity: number
-} | null
-
-export type Inventory = InventoryItem[]
-
-export type ShopInventoryItem = {
-  item: Item
-} | null
-
-export type ShopInventory = ShopInventoryItem[]
+  quantity?: number
+}

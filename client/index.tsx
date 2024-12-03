@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     audience: '',
     //   }}
     // >
-      <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />,
     // </Auth0Provider>,
   )
 })

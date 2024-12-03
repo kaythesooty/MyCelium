@@ -2,12 +2,13 @@ import { Dispatch } from 'react'
 import { EventBus } from '../EventBus'
 import matrix from '@utils/matrix'
 import clamp from '@utils/clamp'
-import { MushroomInfobox, Spore, InventoryItem } from '@interfaces'
+import { MushroomInfobox, Spore, SlotItem } from '@interfaces'
 import CreateBackground from '@game/scripts/CreateBackground'
 import CreateForeground from '@game/scripts/CreateForeground'
 import CreateMainCamera from '@game/scripts/CreateMainCamera'
 import CreateInventory from '@game/scripts/CreateInventory'
 import { Mushroom } from '@game/entities/Mushroom'
+import { wateringCan, shovelOne } from '../../audio/audioEngine'
 
 interface GameTile {
   moist: number
@@ -42,7 +43,7 @@ export class Mushrooms extends Phaser.Scene {
 
   gameState: GameState = GameState.Idle
   foregroundData!: GameTile[][]
-  inventoryData!: InventoryItem[]
+  inventoryData!: SlotItem[]
   moneyData: number = 73
 
   wateringCan!: Phaser.GameObjects.Image
@@ -79,25 +80,19 @@ export class Mushrooms extends Phaser.Scene {
       this,
     )
 
-    this.inventoryData = CreateInventory()
+    this.inventoryData = CreateInventory() // Tweak the starting inventory here
+    // Setting the registry data for the shared inventory and money
     this.registry.set({
       money: this.moneyData,
       inventory: this.inventoryData,
     })
 
-    this.events.on('registry:add-inventory', (value: InventoryItem[]) => {
-      const currentInventory = this.registry.get('inventory')
-      this.registry.set('inventory', currentInventory.push(value))
+    this.events.on('registry:update-inventory', (inventory: SlotItem[]) => {
+      this.registry.set('inventory', inventory)
     })
 
-    this.events.on('registry:add-money', (value: number) => {
-      const currentMoney = this.registry.get('money')
-      this.registry.set('money', currentMoney + value)
-    })
-
-    this.events.on('registry:subtract-money', (value: number) => {
-      const currentMoney = this.registry.get('money')
-      this.registry.set('money', currentMoney - value)
+    this.events.on('registry:update-money', (value: number) => {
+      this.registry.set('money', value)
     })
 
     this.foregroundData = matrix(this.WORLD_WIDTH, this.WORLD_HEIGHT)
@@ -146,17 +141,21 @@ export class Mushrooms extends Phaser.Scene {
 
         const newFood = delta / (300 / this.T_SCALE)
         this.foregroundData[x][y].nitrogen -= newFood
-        if (this.foregroundData[x][y].nitrogen <= 0) this.foregroundData[x][y].nitrogen = 0
+        if (this.foregroundData[x][y].nitrogen <= 0)
+          this.foregroundData[x][y].nitrogen = 0
 
         const mushroom = this.foregroundData[x][y].mushroom
-        const tile = this.foregroundData[x][y]
         if (mushroom) {
+          const tile = this.foregroundData[x][y]
           // In here should be the multiplier logic for the growth speed
           let multiplier = 1
           if (Math.floor(tile.moist / 100) === mushroom.thirst) multiplier = 0.5
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1) multiplier = 0.8
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1) multiplier = 0.8
-          else if (Math.floor(tile.moist / 100) != mushroom.thirst) multiplier = 100
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1)
+            multiplier = 0.8
+          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1)
+            multiplier = 0.8
+          else if (Math.floor(tile.moist / 100) != mushroom.thirst)
+            multiplier = 100
           if (tile.nitrogen == 0) multiplier = 100
 
           mushroom.grow(
@@ -209,9 +208,16 @@ export class Mushrooms extends Phaser.Scene {
       graphics.fillRect(tileXWorld, tileYWorld, this.TILE_SIZE, this.TILE_SIZE)
 
       if (this.pointer.isDown) {
+        if (!wateringCan.playing()) {
+          wateringCan.play()
+        }
         this.foregroundData[hoverY][hoverX].moist += (delta / 10) * this.T_SCALE
         if (this.foregroundData[hoverY][hoverX].moist >= 400) {
           this.foregroundData[hoverY][hoverX].moist = 400
+        }
+      } else {
+        if (wateringCan.playing()) {
+          wateringCan.stop()
         }
       }
     }
@@ -238,6 +244,7 @@ export class Mushrooms extends Phaser.Scene {
           this.TILE_SIZE,
           this.sporeToPlant,
         )
+        shovelOne.play()
       }
     }
 
@@ -305,6 +312,8 @@ export class Mushrooms extends Phaser.Scene {
     if (this.mushroomPreview) this.mushroomPreview.destroy()
     if (this.sporeToPlant) this.sporeToPlant = null
     if (this.infoboxCallback) this.infoboxCallback(null)
+
+    // buttonClickTwo.play()
   }
 
   startWatering() {
@@ -354,18 +363,4 @@ export class Mushrooms extends Phaser.Scene {
   startFocus() {
     this.camera.zoomTo(2.2, 100)
   }
-
-  //   saveGame() {
-  //     const file = {
-  //        gameState: this.gameState
-  //     }
-  //     localStorage.setItem('saveFile',JSON.stringify(file));
-  // }
-
-  // loadGame() {
-  //     const file = localStorage.getItem('saveFile')
-  //     if (!file) return
-  //     JSON.parse(file);
-  //    this.gameState = file.gameState
-  // };
 }

@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef } from "react"
-import { Game } from "phaser"
+import { useLayoutEffect, useRef } from 'react'
+import { Game } from 'phaser'
 import StartGame from '@game/main'
 
 export default function PhaserContainer() {
@@ -15,6 +15,6 @@ export default function PhaserContainer() {
       }
     }
   }, [])
-  
+
   return <div id="game-container" className="z-0 h-dvh w-full" />
 }

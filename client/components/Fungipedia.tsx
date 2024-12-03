@@ -1,19 +1,25 @@
-import data from '@data/data'
 import { useState } from 'react'
+import data from '@data/data'
+import { pageFlipBack, pageFlipForward } from '@audio/audioEngine'
 
 export default function Fungipedia() {
   const [currentPage, setCurrentPage] = useState(0)
 
   const nextPage = () => {
     setCurrentPage((prev) => (prev < data.length - 1 ? prev + 1 : 0))
+    handleFlipForwardAudio()
   }
 
   const previousPage = () => {
     setCurrentPage((prev) => (prev > 0 ? prev - 1 : data.length - 1))
+    handleFlipBackAudio()
   }
 
   const currentData = data[currentPage]
   const { type, content } = currentData
+
+  const handleFlipForwardAudio = () => pageFlipForward.play()
+  const handleFlipBackAudio = () => pageFlipBack.play()
 
   return (
     <div className="relative flex h-[600px] w-[800px] bg-[url('/assets/bg_book.png')] bg-contain bg-no-repeat p-6">
