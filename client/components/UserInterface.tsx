@@ -168,7 +168,7 @@ export default function UserInterface() {
           }}
         />
 
-        <Button
+        {scene?.IS_DEBUG && <Button
           text="Inventory Log"
           iconSrc={'/assets/icon_trowel.png'}
           iconPosition="right"
@@ -176,7 +176,7 @@ export default function UserInterface() {
           onClick={() => {
             console.log(scene?.registry.get('inventory'))
           }}
-        />
+        />}
       </div>
 
       {tooltip && (

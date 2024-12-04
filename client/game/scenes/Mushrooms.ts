@@ -19,15 +19,15 @@ enum GameState {
 }
 
 export class Mushrooms extends Phaser.Scene {
-  IS_DEBUG = true // You know what to do >:-)
-  T_SCALE = 5 // Controls the time scale of the game for debugging purposes
+  IS_DEBUG = false // You know what to do >:-)
+  T_SCALE = 1 // Controls the time scale of the game for debugging purposes
 
   TILE_SIZE = 150
   WORLD_WIDTH = 9
   WORLD_HEIGHT = 7
 
-  GROWTHSPEED = 60 // how long in seconds it takes a mushroom to grow one step
-  DRYSPEED = 60 // how long in seconds it takes a dirt tile to dry one step
+  GROWTHSPEED = 90 // how long in seconds it takes a mushroom to grow one step
+  DRYSPEED = 120 // how long in seconds it takes a dirt tile to dry one step
 
   camera!: Phaser.Cameras.Scene2D.Camera
   pointer!: Phaser.Input.Pointer
