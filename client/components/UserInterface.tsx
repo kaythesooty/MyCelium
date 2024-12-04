@@ -27,7 +27,10 @@ export default function UserInterface() {
   const [userMoney, setUserMoney] = useState<number>(0)
 
   useEffect(() => {
-    const handleContext = (event: MouseEvent) => {
+    const handleMoveBack = (event: MouseEvent | KeyboardEvent) => {
+      if (event.type === 'keydown' && (event as KeyboardEvent).key !== 'Escape')
+        return
+
       event.preventDefault()
       if (popup || tooltip) handleBackAudio() // Playing the back audio
       if (popup !== null) setPopup(null)
@@ -35,8 +38,14 @@ export default function UserInterface() {
       scene?.stopEverything()
     }
 
+    const handleFocusReset = () => {
+      if (document.activeElement) (document.activeElement as HTMLElement).blur()
+    }
+
     EventBus.on('current-scene-ready', (scene: Mushrooms) => setScene(scene))
-    document.addEventListener('contextmenu', handleContext)
+    document.addEventListener('keydown', handleMoveBack)
+    document.addEventListener('contextmenu', handleMoveBack)
+    document.addEventListener('click', handleFocusReset)
 
     if (infoData) {
       setPopup(PopupName.Infobox)
@@ -49,7 +58,9 @@ export default function UserInterface() {
 
     return () => {
       EventBus.removeListener('current-scene-ready')
-      document.removeEventListener('contextmenu', handleContext)
+      document.removeEventListener('keydown', handleMoveBack)
+      document.removeEventListener('contextmenu', handleMoveBack)
+      document.removeEventListener('click', handleFocusReset)
     }
   }, [scene, popup, tooltip, infoData, userMoney])
 
@@ -59,14 +70,14 @@ export default function UserInterface() {
   return (
     <>
       <div
-        className={`absolute top-36 flex h-12 w-44 items-center justify-start rounded-full border-2 border-[#704B2C] bg-[#E3E4B2] bg-texture font-game transition-all ${tooltip !== null ? ' -left-64' : 'left-8'}`}
+        className={`absolute top-36 flex h-[5vh] w-[9vw] items-center justify-start rounded-full border-[0.25vh] border-[#664326] bg-[#E3E4B2] bg-texture font-game text-[1.5vh] transition-all ${tooltip !== null ? ' -left-64' : 'left-8'}`}
       >
         <img
           src="/assets/icon_cash.png"
           alt=""
           width={96}
           height={96}
-          className="pointer-events-none absolute z-10 size-20"
+          className="pointer-events-none absolute z-10 size-[8vh]"
         />
         <span className="pointer-events-none ml-12 mr-6 w-full -translate-y-2 text-right text-[#522c13]">
           ${userMoney}
@@ -74,14 +85,15 @@ export default function UserInterface() {
       </div>
 
       <div
-        className={`absolute flex flex-col gap-12 transition-all ${
-          tooltip !== null ? ' -left-64' : 'left-8'
+        className={`absolute flex flex-col gap-[4vh] transition-all ${
+          tooltip !== null ? ' -left-[13vw]' : 'left-[2vw]'
         }`}
       >
         <Button
           text="Chest"
           iconSrc={'/assets/icon_chest.png'}
           iconPosition="left"
+          inactive={tooltip !== null}
           onClick={() => {
             setPopup(PopupName.Chest)
             handleButtonAudio()
@@ -93,6 +105,7 @@ export default function UserInterface() {
           text="Market"
           iconSrc={'/assets/icon_market.png'}
           iconPosition="left"
+          inactive={tooltip !== null}
           onClick={() => {
             setPopup(PopupName.Market)
             handleButtonAudio()
@@ -104,6 +117,7 @@ export default function UserInterface() {
           text="Fungipedia"
           iconSrc={'/assets/icon_fungipedia.png'}
           iconPosition="left"
+          inactive={tooltip !== null}
           onClick={() => {
             setPopup(PopupName.Fungipedia)
             handleButtonAudio()
@@ -114,13 +128,14 @@ export default function UserInterface() {
 
       <div
         className={`absolute flex flex-col gap-12 transition-all ${
-          tooltip !== null ? ' -right-64' : 'right-8'
+          tooltip !== null ? ' -right-[13vw]' : 'right-[2vw]'
         }`}
       >
         <Button
           text="Water"
           iconSrc={'/assets/icon_watering_can.png'}
           iconPosition="right"
+          inactive={tooltip !== null}
           onClick={() => {
             scene?.startWatering()
             handleButtonAudio()
@@ -132,6 +147,7 @@ export default function UserInterface() {
           text="Fertilise"
           iconSrc={'/assets/icon_fertiliser.png'}
           iconPosition="right"
+          inactive={tooltip !== null}
           onClick={() => {
             handleButtonAudio()
             scene?.startFeeding()
@@ -143,6 +159,7 @@ export default function UserInterface() {
           text="Plant"
           iconSrc={'/assets/icon_trowel.png'}
           iconPosition="right"
+          inactive={tooltip !== null}
           onClick={() => {
             if (!sporeItem) return // Need to figure out the logic for this
             scene?.startPlanting(sporeItem, setInfoData)
@@ -155,8 +172,9 @@ export default function UserInterface() {
           text="Inventory Log"
           iconSrc={'/assets/icon_trowel.png'}
           iconPosition="right"
+          inactive={tooltip !== null}
           onClick={() => {
-            console.log(scene?.registry.get("inventory"))
+            console.log(scene?.registry.get('inventory'))
           }}
         />
       </div>
