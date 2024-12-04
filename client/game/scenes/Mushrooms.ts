@@ -2,13 +2,14 @@ import { Dispatch } from 'react'
 import { EventBus } from '../EventBus'
 import matrix from '@utils/matrix'
 import clamp from '@utils/clamp'
-import { MushroomInfobox, Spore, SlotItem, GameTile } from '@interfaces'
+import { MushroomInfobox, Spore, SlotItem, GameTile, Item } from '@interfaces'
 import CreateBackground from '@game/scripts/CreateBackground'
 import CreateForeground from '@game/scripts/CreateForeground'
 import CreateMainCamera from '@game/scripts/CreateMainCamera'
 import CreateInventory from '@game/scripts/CreateInventory'
 import { Mushroom } from '@game/entities/Mushroom'
 import { wateringCan, shovelOne } from '../../audio/audioEngine'
+import items from '@data/items'
 
 enum GameState {
   Idle,
@@ -331,27 +332,23 @@ export class Mushrooms extends Phaser.Scene {
 
     const inv = this.registry.get("inventory") as SlotItem[]
     console.log("on harvest: ", inv)
-    let item = inv.findIndex((itm) => itm.item.name === "Lovers Redcap")
-    console.log(item)
+    //note this is very hacky. eventually we need to get the actual proper item from the mushroom but for now we only have one so itz okey
 
-    if (item != -1) {
-      inv[item].quantity++
-    } else {
-      item = inv.findIndex(itm => itm == null)
-      if (item == -1) item = 0
-      inv[item] = {
-        index: 0,
-        item: {
-          name: 'Lovers Redcap',
-          description: 'It do be a cap doe',
-          img: '/assets/item_red_mushroom.png',
-          type: 'Cap',
-          sellPrice: 10,
-          buyPrice: 200,
-        },
-        quantity: 1,
+    function addItem(item: Item) {
+      let index = inv.findIndex((itm) => itm.item.name === item.name)
+
+      if (index != -1) {
+        inv[index].quantity++
+      } else {
+        index = inv.findIndex(itm => itm == null)
+        if (index == -1) index = inv.length
+        inv[index] = {index, item, quantity: 1}
       }
     }
+
+    addItem(items[0])
+    addItem(items[1])
+    
   }
 
   stopEverything() {

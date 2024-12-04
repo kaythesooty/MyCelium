@@ -1,4 +1,6 @@
-const items = [
+import { Item } from "@interfaces"
+
+const items: Item[] = [
   {
     name: "Lover's Redcap",
     img: '/assets/item_redcap.png',
@@ -22,8 +24,8 @@ const items = [
     name: 'Hollow Snakehead Cap',
     description: 'brief description of said item',
     type: 'what kind of object it is eg. spore',
-    sellPrice: 'selling price at market',
-    buyPrice: 'buy price at market',
+    sellPrice: 10,
+    buyPrice: 25,
   },
   {
     img: 'something.png',
@@ -31,8 +33,8 @@ const items = [
     id: 'reference to growth frames',
     description: 'brief description of said item',
     type: 'what kind of object it is eg. spore',
-    sellPrice: 'selling price at market',
-    buyPrice: 'buy price at market',
+    sellPrice: 10,
+    buyPrice: 25,
   },
 ]
 
