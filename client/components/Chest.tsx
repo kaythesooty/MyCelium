@@ -12,7 +12,7 @@ export default function ChestPopup({ scene }: { scene: Mushrooms | null }) {
   }, [scene])
 
   return (
-    <div className="flex items-center gap-24 bg-[url('/public/assets/bg_paper.png')] p-6">
+    <div className="flex items-center gap-24 rounded-xl bg-[url('/public/assets/bg_paper.png')] p-6">
       {/* Left Side: Tile Grid */}
       <div className="grid grid-cols-6 gap-8">
         {new Array(30).fill(null).map((slot, index) => {
