@@ -54,8 +54,7 @@ export class Mushrooms extends Phaser.Scene {
   }
 
   create() {
-      
-      this.camera = CreateMainCamera(
+    this.camera = CreateMainCamera(
       this.WORLD_WIDTH,
       this.WORLD_HEIGHT,
       this.TILE_SIZE,
@@ -141,7 +140,7 @@ export class Mushrooms extends Phaser.Scene {
         this.foregroundData[x][y].moist -= newMoist
         if (moistStage <= 0) this.foregroundData[x][y].moist = 0
 
-        const newFood = delta / (30 * this.DRYSPEED / this.T_SCALE)
+        const newFood = delta / ((30 * this.DRYSPEED) / this.T_SCALE)
         this.foregroundData[x][y].nitrogen -= newFood
         if (this.foregroundData[x][y].nitrogen <= 0)
           this.foregroundData[x][y].nitrogen = 0
@@ -154,16 +153,13 @@ export class Mushrooms extends Phaser.Scene {
           if (Math.floor(tile.moist / 100) === mushroom.thirst) {
             multiplier = 0.5
             mushroom.watered = 2
-          }
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1) {
+          } else if (Math.floor(tile.moist / 100) === mushroom.thirst - 1) {
             multiplier = 0.8
             mushroom.watered = 1
-          }
-          else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1) {
+          } else if (Math.floor(tile.moist / 100) === mushroom.thirst + 1) {
             multiplier = 0.8
             mushroom.watered = 1
-          }
-          else if (Math.floor(tile.moist / 100) != mushroom.thirst) {
+          } else if (Math.floor(tile.moist / 100) != mushroom.thirst) {
             multiplier = 100
             mushroom.watered = 0
           }
@@ -335,25 +331,30 @@ export class Mushrooms extends Phaser.Scene {
     tile.mushroom.mushroom.destroy()
     tile.mushroom = null
 
-    const inv = this.registry.get("inventory") as SlotItem[]
-    console.log("on harvest: ", inv)
+    const inv = this.registry.get('inventory') as SlotItem[]
+    console.log('on harvest: ', inv)
     //note this is very hacky. eventually we need to get the actual proper item from the mushroom but for now we only have one so itz okey
 
     function addItem(item: Item) {
-      let index = inv.findIndex((itm) => itm.item.name === item.name)
+      const chestItem = inv.find((slot) => slot?.item.name === item.name)
+      const index = inv.findIndex((slot) => slot?.item.name === item.name)
 
-      if (index != -1) {
-        inv[index].quantity++
-      } else {
-        index = inv.findIndex(itm => itm == null)
-        if (index == -1) index = inv.length
-        inv[index] = {index, item, quantity: 1}
+      if (chestItem && inv[index].quantity) inv[index].quantity++
+      else {
+        let fisrtEmptySlotIndex = 0
+        for (let index = 0; index < 30; index++) {
+          const exists = inv.find((slot) => slot?.index === index)
+          if (exists) continue
+          fisrtEmptySlotIndex = index
+          break
+        }
+
+        inv.push({ index: fisrtEmptySlotIndex, item, quantity: 1 })
       }
     }
 
     addItem(items[0])
     addItem(items[1])
-    
   }
 
   stopEverything() {
