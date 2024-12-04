@@ -16,24 +16,22 @@ export default function ChestPopup({ scene }: { scene: Mushrooms | null }) {
       {/* Left Side: Tile Grid */}
       <div className="grid grid-cols-6 gap-8">
         {new Array(30).fill(null).map((slot, index) => {
-          const chestItemIndex = chest.findIndex(
-            (chestItem) => chestItem?.index === index,
-          )
+          const chestItem = chest.find((item) => item?.index === index)
 
           return (
             <button
               key={index}
-              disabled={chestItemIndex === -1}
+              disabled={!chestItem}
               className={`relative flex size-20 items-center justify-center rounded-lg font-game hover:bg-orange-400 ${chestSlot === index ? 'bg-[#f4c78c] outline outline-2 outline-offset-2 outline-[#f4c78c]' : 'bg-[#EAD9C3]'}`}
               onClick={() => {
                 setChestSlot(index)
               }}
             >
-              {chestItemIndex >= 0 && (
+              {chestItem && (
                 <>
-                  <img src={chest[index].item.img} alt="" className="size-16" />
+                  <img src={chestItem.item.img} alt="" className="size-16" />
                   <div className="absolute bottom-2 right-1 z-10 text-xs">
-                    x{chest[index].quantity}
+                    x{chestItem.quantity}
                   </div>
                 </>
               )}
