@@ -20,12 +20,9 @@ const data = [
     type: 'tutorial',
     content: {
       title: 'Tutorial',
-      description:
-        "Welcome to My Celium! Firstly, select the plant action by clicking on the button labeled plant, then select the tile you wish to plant your first spore in and click once more. Congratulations, you've just started cultivating your first mushroom! Sell your goods at the market to purchase rare and unique mushrooms.",
-      play: 'To start play, you click on the fertiliser button to plant your first spore.',
-      care: 'To care for the spore you have to watch for signs in the soil and growth, one of the biggest challenges is draught, as the soil gets lighter the mushroom growth will slow. They like moisture and fertisation to click their spirits high, experiment with how much to feed/water.',
-      growth:
-        'The growth stage should look something like this below, if it gets to fully grown. Try your luck in selling at the local Market, level up to buy rare spores.',
+      description: 'Welcome to My Celium!',
+      play: 'To begin playing, click on the button labelled plant to cultivate your first spores.',
+      care: "To care for your spores (and later mushrooms), you'll have to water the substrate to its specific liking by clicking the watering can and holding left click over its tile. Be sure to water your substrate regularly to mantain steady growth, but be aware that not every mushroom likes being drenched (see individual fungipedia entries for more info). You'll also want to regularly fertilise your fungi for the best growth results, which is done by clicking the fertilise button, then clicking and holding in a similar way to watering.",
     },
   },
 
@@ -34,7 +31,7 @@ const data = [
     content: {
       img: 'item_red_mushroom.png',
       name: "Lover's Redcap",
-      family: '(Amantes vertice rubrum)',
+      family: 'Amantes vertice rubrum',
       properties: 'edible, medicinal',
       toxicity: 'N/A',
       location:
@@ -48,7 +45,7 @@ const data = [
     content: {
       img: 'item_morel.png',
       name: 'Hollow Snakehead',
-      family: '(Cavae anguis caput morchella)',
+      family: 'Cavae anguis caput morchella',
       properties: 'edible, tasty',
       toxicity: 'POISONOUS',
       location:
@@ -62,13 +59,13 @@ const data = [
     content: {
       img: 'item_bolete.png',
       name: "Fool's Bolete",
-      family: '(boletus stultus)',
+      family: 'Boletus stultus',
       properties: 'magic, deadly',
       toxicity: 'POISONOUS',
       location:
         'Found amongst long dead carcasses of any variety,subsisting off of the dry bones',
       description:
-        'A deceptively archetypal bolete, complete with an innocuous brown cap and stubby stem.This fungi excels in the art of mimicry, looking virtually indistinct from many other edible mushrooms of its variety. What sets it apart is its utterly lethal poison, which has no known antidote as of yet, and there may never be one given its mysterious necrotic nature. This makes it a favourite amongst assassins and warlocks alike, as well as a fitting last meal for those moronic enough to eat something harvested from remains.',
+        'A deceptively archetypal bolete, complete with an innocuous brown cap and stubby stem.This fungi excels in the art of mimicry, looking virtually indistinguishable from many other edible mushrooms of its variety. What sets it apart is its utterly lethal poison, which has no known antidote as of yet, and there may never be one given its mysterious necrotic nature. This makes it a favourite amongst assassins and warlocks alike, as well as a fitting last meal for those moronic enough to eat something harvested from remains.',
     },
   },
   {
@@ -78,25 +75,25 @@ const data = [
       name: 'Cerulean Bonnet',
       family: '(cserulus mitram)',
       properties: 'magic, mysterious',
-      toxicity: 'unknown',
+      toxicity: 'UNKNOWN',
       location:
         'known to prefer drier areas,  this mushroom is most commonly found wherever deadwood is plentiful ',
       description:
-        'Characterised by an exceedingly thin stem and comparatively large cap, this species flaunts a magnificent cobalt colouration.These little colorful champignons are full of mystique,with little being known about their biology or potential uses. So far not a single soul has had the stomach nor the bravery to ingest one of these for long enough to find out what effects it may have on the human body. It has become notorious over the years for being a pain to grow without near perfect conditions, so it can still fetch a dandy price if you can find a curious (and strange) enough buyer.',
+        'Characterised by an exceedingly thin stem and comparatively large cap, this species flaunts a magnificent cobalt colouration.These little colorful champignons are full of mystique,with little being known about their biology or potential uses. So far not a single soul has had the stomach nor the courage to ingest one of these for long enough to find out what effects it may have on the human body. It has become notorious over the years for being a pain to grow without near perfect conditions, so it can still fetch a dandy price if you can find a curious (and strange) enough buyer.',
     },
   },
   {
     type: 'mushroom',
     content: {
-      img: 'item_puffball.png',
+      img: 'sprite_puffball.png',
       name: 'Cumulo Puffball',
-      family: '(cumulo vento-pila)',
+      family: 'Cumulo vento-pila',
       properties: 'edible, tasty',
       toxicity: 'POISONOUS',
       location:
         'Thriving within warmer climates,this particular puffball prefers to bask in the sun surrounded by decomposing vegetation',
       description:
-        "Renowned for its size relative to other fungi, the puffball also stands out amongst the crowd because of its distinct lack of any real exterior form, foregoing the usual stem-cap arrangement for a more amorphous, cloud-like approach. This species in particular is notable for being fairly volatile, dispersing its toxic spores as a defense mechanism if it is disturbed too much before adequate preparation/disarmament. They are very popular amongst traders given just how many spores you can produce from a single body, but consequently don't sell for huge amounts.",
+        "Renowned for its size relative to other fungi, the Cumulo Puffball also stands out amongst the crowd because of its distinct lack of any real exterior form, foregoing the usual stem-cap arrangement for a more amorphous, cloud-like approach. This fungus is particularly volatile, dispersing its spores as a kind of defense mechanism if its disturbed too much before preparation/disarmament. They are very popular amongst traders given just how many spores you can extract from a single body, but consequently don't sell for huge amounts.",
     },
   },
   {
@@ -110,7 +107,7 @@ const data = [
       location:
         'Found in damp woods, hidden amongst the vegetation of the forest floor',
       description:
-        "A tall mushroom sporting a narrow stem, and a wide cap speckled in orange, black, and white. It's a delicious mushroom, but only when boiled beforehand to neutralise its potent toxins. It’ll fetch a solid price at any market given its popularity amongst discerning mycophiles.",
+        "A tall mushroom sporting a narrow stem, and a wide cap speckled in orange, black, and white. It's a delicious mushroom, but only when boiled beforehand to neutralise its debilitating toxins. It'll fetch a solid price at any market given its popularity amongst discerning mycophiles.",
     },
   },
 ]

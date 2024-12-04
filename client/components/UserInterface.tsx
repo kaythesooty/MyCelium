@@ -133,7 +133,7 @@ export default function UserInterface() {
       >
         <Button
           text="Water"
-          iconSrc={'/assets/icon_watering_can.png'}
+          iconSrc={'/assets/sprite_watering_can.png'}
           iconPosition="right"
           inactive={tooltip !== null}
           onClick={() => {
@@ -168,15 +168,17 @@ export default function UserInterface() {
           }}
         />
 
-        {scene?.IS_DEBUG && <Button
-          text="Inventory Log"
-          iconSrc={'/assets/icon_trowel.png'}
-          iconPosition="right"
-          inactive={tooltip !== null}
-          onClick={() => {
-            console.log(scene?.registry.get('inventory'))
-          }}
-        />}
+        {scene?.IS_DEBUG && (
+          <Button
+            text="Inventory Log"
+            iconSrc={'/assets/icon_trowel.png'}
+            iconPosition="right"
+            inactive={tooltip !== null}
+            onClick={() => {
+              console.log(scene?.registry.get('inventory'))
+            }}
+          />
+        )}
       </div>
 
       {tooltip && (

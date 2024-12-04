@@ -1,20 +1,28 @@
 import { useState, useEffect } from 'react'
 import { Mushrooms } from '@game/scenes/Mushrooms'
 import { SlotItem } from '@interfaces'
+import items from '../data/items.ts'
 
 const marketData: SlotItem[] = [
   {
     index: 0,
-    item: {
-      img: '/assets/item_sack_redcap.png',
-      name: "Spore Sack (Lover's Redcap)",
-      id: 'frames_mushroom_red',
-      description:
-        "Spores from the cute redcap you harvested, it's sad it had to end that way. Can be planted or sold",
-      type: 'spores',
-      sellPrice: 5,
-      buyPrice: 25,
-    },
+    item: items[1],
+  },
+  {
+    index: 1,
+    item: items[7],
+  },
+  {
+    index: 2,
+    item: items[5],
+  },
+  {
+    index: 3,
+    item: items[3],
+  },
+  {
+    index: 4,
+    item: items[9],
   },
 ]
 
