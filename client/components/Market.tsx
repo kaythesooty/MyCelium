@@ -15,7 +15,6 @@ const marketData: SlotItem[] = [
       sellPrice: 5,
       buyPrice: 25,
     },
-    quantity: 20,
   },
 ]
 
@@ -72,6 +71,7 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
 
     if (existingSlotIndex >= 0 && chest[existingSlotIndex].quantity) {
       chest[existingSlotIndex].quantity++
+      scene?.events.emit('registry:update-inventory', chest)
     } else {
       console.log(existingSlotIndex)
       const newItem = {
@@ -80,8 +80,8 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
         quantity: 1,
       }
       setChest([...chest, newItem])
+      scene?.events.emit('registry:update-inventory', [...chest, newItem])
     }
-    scene?.events.emit('registry:update-inventory', chest)
     setMoney(money - market[marketSlot].item.buyPrice)
     scene?.events.emit(
       'registry:update-money',
@@ -137,32 +137,27 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
       <div className="flex gap-24">
         <div className="grid grid-cols-6 gap-3">
           {new Array(30).fill(null).map((slot, index) => {
-            const chestItemIndex = chest.findIndex(
-              (chestItem) => chestItem?.index === index,
-            )
+            const chestItem = chest.find((item) => item?.index === index)
 
             return (
               <button
                 key={index}
-                disabled={chestItemIndex === -1}
+                disabled={!chestItem}
                 className={`relative flex size-28 items-center justify-center font-game hover:bg-orange-400 ${chestSlot === index ? 'bg-orange-400 outline outline-2 outline-offset-2 outline-orange-400' : 'bg-orange-300'}`}
                 onClick={() => {
                   setMarketSlot(null)
                   setChestSlot(index)
                 }}
               >
-                {chestItemIndex >= 0 && (
+                {chestItem && (
                   <>
-                    <img
-                      src={chest[index].item.img}
-                      alt=""
-                      className="size-24"
-                    />
-                    <div className="absolute bottom-3 right-1 z-10 text-sm">
-                      x{chest[index].quantity}
+                    <img src={chestItem.item.img} alt="" className="size-20" />
+                    <div className="text-outline absolute bottom-3 right-1 z-10">
+                      <span className="mr-1 text-xs">x</span>
+                      {chestItem.quantity}
                     </div>
-                    <div className="absolute bottom-3 left-1 z-10">
-                      ${chest[index].item.sellPrice}
+                    <div className="text-outline absolute bottom-4 left-2 z-10 text-xl">
+                      ${chestItem.item.sellPrice}
                     </div>
                   </>
                 )}
@@ -172,32 +167,23 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
         </div>
         <div className="grid grid-cols-3 gap-3">
           {new Array(15).fill(null).map((slot, index) => {
-            const marketItemIndex = market.findIndex(
-              (marketItem) => marketItem?.index === index,
-            )
+            const marketItem = market.find((item) => item?.index === index)
 
             return (
               <button
                 key={index}
-                disabled={marketItemIndex === -1}
+                disabled={!marketItem}
                 className={`relative flex size-28 items-center justify-center font-game hover:bg-blue-400 ${marketSlot === index ? 'bg-blue-400 outline outline-2 outline-offset-2 outline-blue-400' : 'bg-blue-300'}`}
                 onClick={() => {
                   setChestSlot(null)
                   setMarketSlot(index)
                 }}
               >
-                {marketItemIndex >= 0 && (
+                {marketItem && (
                   <>
-                    <img
-                      src={market[index].item.img}
-                      alt=""
-                      className="size-24"
-                    />
-                    <div className="absolute bottom-3 right-1 z-10 text-sm">
-                      x{market[index].quantity}
-                    </div>
-                    <div className="absolute bottom-3 left-1 z-10">
-                      ${market[index].item.buyPrice}
+                    <img src={marketItem.item.img} alt="" className="size-20" />
+                    <div className="text-outline absolute bottom-4 left-2 z-10 text-xl">
+                      ${marketItem.item.buyPrice}
                     </div>
                   </>
                 )}
