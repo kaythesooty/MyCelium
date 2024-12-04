@@ -6,7 +6,7 @@ const marketData: SlotItem[] = [
   {
     index: 0,
     item: {
-      img: '/assets/item_sack.png',
+      img: '/assets/item_sack_redcap.png',
       name: "Spore Sack (Lover's Redcap)",
       id: 'frames_mushroom_red',
       description:
@@ -35,21 +35,27 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
   const handleSell = () => {
     if (chestSlot === null) return
 
-    const chestItemIndex = chest.findIndex((slot) => slot?.index === chestSlot)
+    const chestItem = chest.find((item) => item?.index === chestSlot)
     // Removing quantity of the item by one if item exists
-    if (chestItemIndex === -1) return
+    if (!chestItem) return
     // Typescript wants us to make sure that quantity key is indeed there
-    else if (chest[chestItemIndex]?.quantity) chest[chestItemIndex].quantity--
-    setMoney(money + chest[chestSlot].item.sellPrice)
+    else if (chestItem?.quantity) chestItem.quantity--
+
+    setMoney(money + chestItem.item.sellPrice)
     scene?.events.emit(
       'registry:update-money',
-      money + chest[chestSlot].item.sellPrice,
+      money + chestItem.item.sellPrice,
     )
-    // Now if quantity is 0 - removing it from the array, and updating state
-    if (chest[chestItemIndex].quantity === 0) {
+
+    // If quantity is 0 - removing it from the array, and updating memory
+    if (chestItem.quantity === 0) {
+      const chestItemIndex = chest.findIndex(
+        (item) => item?.index === chestSlot,
+      )
       chest.splice(chestItemIndex, 1)
       setChestSlot(null)
     }
+
     setChest([...chest])
     scene?.events.emit('registry:update-inventory', chest)
   }
