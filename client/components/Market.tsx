@@ -154,8 +154,8 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
                 className={
                   'relative flex size-28 items-center justify-center rounded-lg font-game hover:bg-[#FFA53F]' +
                   (chestSlot === index
-                    ? 'bg-[#FFA53F] outline outline-2 outline-offset-2 outline-orange-400'
-                    : 'bg-orange-300')
+                    ? ' bg-[#FFA53F] outline outline-2 outline-offset-2 outline-orange-400'
+                    : ' bg-orange-300')
                 }
                 onClick={() => {
                   setMarketSlot(null)
@@ -189,8 +189,8 @@ export default function Market({ scene }: { scene: Mushrooms | null }) {
                 className={
                   'relative flex size-28 items-center justify-center rounded-lg font-game hover:bg-[#74CEF7]' +
                   (marketSlot === index
-                    ? 'bg-[#74CEF7] outline outline-2 outline-offset-2 outline-blue-400'
-                    : 'bg-blue-300')
+                    ? ' bg-[#74CEF7] outline outline-2 outline-offset-2 outline-blue-400'
+                    : ' bg-blue-300')
                 }
                 onClick={() => {
                   setChestSlot(null)
