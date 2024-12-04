@@ -23,8 +23,8 @@ export class Mushrooms extends Phaser.Scene {
   T_SCALE = 5 // Controls the time scale of the game for debugging purposes
 
   TILE_SIZE = 150
-  WORLD_WIDTH = 10
-  WORLD_HEIGHT = 6
+  WORLD_WIDTH = 9
+  WORLD_HEIGHT = 7
 
   GROWTHSPEED = 60 // how long in seconds it takes a mushroom to grow one step
   DRYSPEED = 60 // how long in seconds it takes a dirt tile to dry one step
@@ -92,10 +92,15 @@ export class Mushrooms extends Phaser.Scene {
     })
 
     this.foregroundData = matrix(this.WORLD_WIDTH, this.WORLD_HEIGHT)
+    this.foregroundData[2][3] = { moist: 0, nitrogen: 0, mushroom: null }
     this.foregroundData[2][4] = { moist: 0, nitrogen: 0, mushroom: null }
-    this.foregroundData[2][5] = { moist: 300, nitrogen: 0, mushroom: null }
-    this.foregroundData[3][4] = { moist: 200, nitrogen: 0, mushroom: null }
-    this.foregroundData[3][5] = { moist: 100, nitrogen: 0, mushroom: null }
+    this.foregroundData[2][5] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[3][4] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[3][5] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[3][3] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[4][4] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[4][5] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[4][3] = { moist: 0, nitrogen: 0, mushroom: null }
 
     this.pointer = this.input.activePointer
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
@@ -354,7 +359,7 @@ export class Mushrooms extends Phaser.Scene {
   stopEverything() {
     this.gameState = GameState.Idle
     this.input.setDefaultCursor('auto')
-    this.camera.zoomTo(2, 100)
+    this.camera.zoomTo(1.6, 100)
 
     if (this.wateringCan) this.wateringCan.destroy()
     if (this.trowel) this.trowel.destroy()
@@ -368,7 +373,7 @@ export class Mushrooms extends Phaser.Scene {
 
   startWatering() {
     this.gameState = GameState.Watering
-    this.camera.zoomTo(2.2, 100)
+    this.startFocus()
     if (!this.IS_DEBUG) this.input.setDefaultCursor('none')
 
     // Creating the watering can sprite
@@ -382,7 +387,7 @@ export class Mushrooms extends Phaser.Scene {
     callback: Dispatch<React.SetStateAction<MushroomInfobox | null>>,
   ) {
     this.gameState = GameState.Planting
-    this.camera.zoomTo(2.2, 100)
+    this.startFocus()
     if (!this.IS_DEBUG) this.input.setDefaultCursor('none')
 
     // Creating the trowel sprite
@@ -411,6 +416,6 @@ export class Mushrooms extends Phaser.Scene {
   }
 
   startFocus() {
-    this.camera.zoomTo(2.2, 100)
+    this.camera.zoomTo(1.8, 100)
   }
 }
