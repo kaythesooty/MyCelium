@@ -1,7 +1,7 @@
 {
   "name": "my-celium",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "server/index.js",
   "license": "MIT",
   "keywords": [
