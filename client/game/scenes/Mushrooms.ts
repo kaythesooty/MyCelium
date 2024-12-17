@@ -23,7 +23,7 @@ export class Mushrooms extends Phaser.Scene {
   T_SCALE = 1 // Controls the time scale of the game for debugging purposes
 
   TILE_SIZE = 150
-  WORLD_WIDTH = 9
+  WORLD_WIDTH = 11
   WORLD_HEIGHT = 7
 
   GROWTHSPEED = 90 // how long in seconds it takes a mushroom to grow one step
@@ -91,15 +91,15 @@ export class Mushrooms extends Phaser.Scene {
     })
 
     this.foregroundData = matrix(this.WORLD_WIDTH, this.WORLD_HEIGHT)
-    this.foregroundData[2][3] = { moist: 0, nitrogen: 0, mushroom: null }
     this.foregroundData[2][4] = { moist: 0, nitrogen: 0, mushroom: null }
     this.foregroundData[2][5] = { moist: 0, nitrogen: 0, mushroom: null }
-    this.foregroundData[3][4] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[2][6] = { moist: 0, nitrogen: 0, mushroom: null }
     this.foregroundData[3][5] = { moist: 0, nitrogen: 0, mushroom: null }
-    this.foregroundData[3][3] = { moist: 0, nitrogen: 0, mushroom: null }
-    this.foregroundData[4][4] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[3][6] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[3][4] = { moist: 0, nitrogen: 0, mushroom: null }
     this.foregroundData[4][5] = { moist: 0, nitrogen: 0, mushroom: null }
-    this.foregroundData[4][3] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[4][6] = { moist: 0, nitrogen: 0, mushroom: null }
+    this.foregroundData[4][4] = { moist: 0, nitrogen: 0, mushroom: null }
 
     this.pointer = this.input.activePointer
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
