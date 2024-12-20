@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { EventBus } from '@game/EventBus'
 import { Mushrooms } from '@game/scenes/Mushrooms'
-import Infobox from '@components/Infobox'
-import Chest from '@components/Chest'
-import Market from '@components/Market'
-import Fungipedia from '@components/Fungipedia'
-import Button from '@components/Buttons'
+import Infobox from '@components/Infobox.tsx'
+import Chest from '@components/Chest.tsx'
+import Market from '@components/Market.tsx'
+import Fungipedia from '@components/Fungipedia.tsx'
+import Button from '@components/Buttons.tsx'
 import { PopupName } from '@enums'
 import { MushroomInfobox, Spore } from '@interfaces'
-import { buttonClickOne, buttonClickTwo } from '../audio/audioEngine.ts'
+import { buttonClickOne, buttonClickTwo } from '@audio/audioEngine.ts'
 
 // Remove later
 const tempSpore: Spore = {
