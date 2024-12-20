@@ -1,4 +1,4 @@
-import { SlotItem } from '@interfaces'
+import { SlotItem } from 'src/models/interfaces.ts'
 import items from '../../data/items.ts'
 
 export default function CreateInventory(): SlotItem[] {

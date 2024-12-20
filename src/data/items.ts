@@ -1,4 +1,4 @@
-import { Item } from '@interfaces'
+import { Item } from 'src/models/interfaces'
 
 const items: Item[] = [
   {
