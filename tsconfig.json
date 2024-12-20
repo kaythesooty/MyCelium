@@ -15,15 +15,16 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@audio/*": ["client/audio/*"],
-      "@components/*": ["client/components/*"],
-      "@data/*": ["client/data/*"],
-      "@game/*": ["client/game/*"],
-      "@pages/*": ["client/pages/*"],
-      "@styles/*": ["client/styles/*"],
-      "@utils/*": ["client/utils/*"],
-      "@enums": ["models/enums.ts"],
-      "@interfaces": ["models/interfaces.ts"],
+      "@audio/*": ["src/audio/*"],
+      "@components/*": ["src/components/*"],
+      "@data/*": ["src/data/*"],
+      "@game/*": ["src/game/*"],
+      "@layers/*": ["src/layers/*"],
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@enums": ["src/models/enums.ts"],
+      "@interfaces": ["src/models/interfaces.ts"],
     }
   }
 }

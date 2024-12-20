@@ -1,4 +1,4 @@
-import { MushroomInfobox } from '@interfaces'
+import { MushroomInfobox } from 'src/models/interfaces'
 
 export default function Infobox({ infoData }: { infoData: MushroomInfobox }) {
   // console.log(infoData.position.x, infoData.position.y)

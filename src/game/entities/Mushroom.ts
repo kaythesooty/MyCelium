@@ -1,4 +1,4 @@
-import { Spore } from '@interfaces'
+import { Spore } from 'src/models/interfaces'
 import clamp from '@utils/clamp'
 import { GameObjects, Scene } from 'phaser'
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Mushrooms } from '@game/scenes/Mushrooms'
 import { SlotItem } from '@interfaces'
-import items from '../data/items.ts'
+import items from '@data/items.ts'
 
 const marketData: SlotItem[] = [
   {
