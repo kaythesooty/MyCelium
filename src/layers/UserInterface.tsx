@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
+import clsx from 'clsx'
 import { EventBus } from '@game/EventBus'
 import { Mushrooms } from '@game/scenes/Mushrooms'
+import { buttonClickOne, buttonClickTwo } from '@audio/audioEngine.ts'
+import { PopupName } from '@enums'
+import { MushroomInfobox, Spore } from '@interfaces'
 import Infobox from '@components/Infobox.tsx'
 import Chest from '@components/Chest.tsx'
 import Market from '@components/Market.tsx'
 import Fungipedia from '@components/Fungipedia.tsx'
-import Button from '@components/Buttons.tsx'
-import { PopupName } from '@enums'
-import { MushroomInfobox, Spore } from '@interfaces'
-import { buttonClickOne, buttonClickTwo } from '@audio/audioEngine.ts'
+import Button from '@components/Button'
 
 // Remove later
 const tempSpore: Spore = {
@@ -70,6 +71,83 @@ export default function UserInterface() {
   return (
     <>
       <div
+        className={clsx(
+          'absolute bottom-8 left-8 flex gap-4 transition-opacity',
+          tooltip ? 'pointer-events-none opacity-0' : 'opacity-100',
+        )}
+      >
+        <Button
+          text="Chest"
+          icon="chest"
+          selectable={!tooltip}
+          onClick={() => {
+            setPopup(PopupName.Chest)
+            handleButtonAudio()
+            setTooltip('Press Right Mouse Button to close Chest')
+          }}
+        />
+        <Button
+          text="Market"
+          icon="market"
+          selectable={!tooltip}
+          onClick={() => {
+            setPopup(PopupName.Market)
+            handleButtonAudio()
+            setTooltip('Press Right Mouse Button to close Market')
+          }}
+        />
+        <Button
+          text="Fungipedia"
+          icon="fungipedia"
+          selectable={!tooltip}
+          onClick={() => {
+            setPopup(PopupName.Fungipedia)
+            handleButtonAudio()
+            setTooltip('Press Right Mouse Button to close Fungipedia')
+          }}
+        />
+      </div>
+
+      <div
+        className={clsx(
+          'absolute bottom-8 right-8 flex gap-4 transition-transform',
+          tooltip && 'translate-x-14 translate-y-32',
+        )}
+      >
+        <Button
+          text="Plant"
+          icon="trowel"
+          selectable={!tooltip}
+          onClick={() => {
+            if (!sporeItem) return // Need to figure out the logic for this
+            scene?.startPlanting(sporeItem, setInfoData)
+            handleButtonAudio()
+            setTooltip('Press Right Mouse Button to stop Planting')
+          }}
+        />
+        <Button
+          text="Water"
+          icon="watering_can"
+          selectable={!tooltip}
+          onClick={() => {
+            scene?.startWatering()
+            handleButtonAudio()
+            setTooltip('Press Right Mouse Button to stop Watering')
+          }}
+        />
+        <Button
+          text="Fertilise"
+          icon="fertiliser"
+          selectable={!tooltip}
+          onClick={() => {
+            handleButtonAudio()
+            scene?.startFeeding()
+            setTooltip('Press Right Mouse Button to stop Fertilising')
+          }}
+        />
+      </div>
+
+      <div
         className={`absolute top-36 flex h-[5vh] w-[9vw] items-center justify-start rounded-full border-[0.25vh] border-[#664326] bg-[#E3E4B2] bg-texture font-game text-[1.5vh] transition-all ${tooltip !== null ? ' -left-64' : 'left-8'}`}
       >
         <img
@@ -82,103 +160,6 @@ export default function UserInterface() {
         <span className="pointer-events-none ml-12 mr-6 w-full -translate-y-2 text-right text-[#522c13]">
           ${userMoney}
         </span>
-      </div>
-
-      <div
-        className={`absolute flex flex-col gap-[4vh] transition-all ${
-          tooltip !== null ? ' -left-[13vw]' : 'left-[2vw]'
-        }`}
-      >
-        <Button
-          text="Chest"
-          iconSrc={'/assets/icon_chest.png'}
-          iconPosition="left"
-          inactive={tooltip !== null}
-          onClick={() => {
-            setPopup(PopupName.Chest)
-            handleButtonAudio()
-            setTooltip('Press Right Mouse Button to close Chest')
-          }}
-        />
-
-        <Button
-          text="Market"
-          iconSrc={'/assets/icon_market.png'}
-          iconPosition="left"
-          inactive={tooltip !== null}
-          onClick={() => {
-            setPopup(PopupName.Market)
-            handleButtonAudio()
-            setTooltip('Press Right Mouse Button to close Market')
-          }}
-        />
-
-        <Button
-          text="Fungipedia"
-          iconSrc={'/assets/icon_fungipedia.png'}
-          iconPosition="left"
-          inactive={tooltip !== null}
-          onClick={() => {
-            setPopup(PopupName.Fungipedia)
-            handleButtonAudio()
-            setTooltip('Press Right Mouse Button to close Fungipedia')
-          }}
-        />
-      </div>
-
-      <div
-        className={`absolute flex flex-col gap-12 transition-all ${
-          tooltip !== null ? ' -right-[13vw]' : 'right-[2vw]'
-        }`}
-      >
-        <Button
-          text="Water"
-          iconSrc={'/assets/sprite_watering_can.png'}
-          iconPosition="right"
-          inactive={tooltip !== null}
-          onClick={() => {
-            scene?.startWatering()
-            handleButtonAudio()
-            setTooltip('Press Right Mouse Button to stop Watering')
-          }}
-        />
-
-        <Button
-          text="Fertilise"
-          iconSrc={'/assets/icon_fertiliser.png'}
-          iconPosition="right"
-          inactive={tooltip !== null}
-          onClick={() => {
-            handleButtonAudio()
-            scene?.startFeeding()
-            setTooltip('Press Right Mouse Button to stop Fertilising')
-          }}
-        />
-
-        <Button
-          text="Plant"
-          iconSrc={'/assets/icon_trowel.png'}
-          iconPosition="right"
-          inactive={tooltip !== null}
-          onClick={() => {
-            if (!sporeItem) return // Need to figure out the logic for this
-            scene?.startPlanting(sporeItem, setInfoData)
-            handleButtonAudio()
-            setTooltip('Press Right Mouse Button to stop Planting')
-          }}
-        />
-
-        {scene?.IS_DEBUG && (
-          <Button
-            text="Inventory Log"
-            iconSrc={'/assets/icon_trowel.png'}
-            iconPosition="right"
-            inactive={tooltip !== null}
-            onClick={() => {
-              console.log(scene?.registry.get('inventory'))
-            }}
-          />
-        )}
       </div>
 
       {tooltip && (
