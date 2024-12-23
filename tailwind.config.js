@@ -11,6 +11,9 @@ export default {
         choco: '#664326',
         nana: '#E3E4B2',
       },
+      transitionProperty: {
+        scale: 'scaleX scaleY',
+      },
     },
   },
   plugins: [],
