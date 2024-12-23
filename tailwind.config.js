@@ -5,10 +5,14 @@ export default {
     extend: {
       fontFamily: {
         game: ['Big Bottom Cartoon', 'cursive'],
-        medieval: ['MedievalSharp', 'serif'], 
+        medieval: ['MedievalSharp', 'serif'],
       },
-      backgroundImage: {
-        'texture': "url('/assets/bg_texture.png')",
+      colors: {
+        choco: '#664326',
+        nana: '#E3E4B2',
+      },
+      transitionProperty: {
+        scale: 'scaleX scaleY',
       },
     },
   },
